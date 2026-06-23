@@ -5,18 +5,18 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserStoreRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
-   
     public function rules(): array
     {
         return [
             'name'      => 'required|string|max:255',
-            'email'     => 'required|string|email|max:255|unique:users',
-            'password'  => 'required|string|min:8'
+            'password'  => 'nullable|string|min:8',
         ];
     }
 
@@ -24,7 +24,6 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name'      => 'Name',
-            'email'     => 'Email',
             'password'  => 'Kata Sandi',
         ];
     }
@@ -34,10 +33,8 @@ class UserStoreRequest extends FormRequest
         return [
             'required'      => ':attribute harus diisi',
             'string'        => ':attribute harus berupa string',
-            'max'           => ':attribute maksimal :max karakter',
+            'max'           => ':attribue maksimal :max karakter',
             'min'           => ':attribute minimal :min karakter',
-            'unique'        => ':attribute sudah ada',
-            'email'         => ':attribute harus berupa email',
         ];
     }
 }
