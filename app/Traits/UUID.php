@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use Illuminate\Support\Str;
-use App\Traits\UUID;
 
 trait UUID
 {

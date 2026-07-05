@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('development_aplicants', function (Blueprint $table) {
+        Schema::create('development_applicants', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('development_id');
             $table->foreignUuid('user_id');
-            $table->enum('status',['pending','approval','rejected']);
+            $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('development_aplicants');
+        Schema::dropIfExists('development_applicants');
     }
 };

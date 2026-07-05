@@ -1,0 +1,132 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Resources\DevelopmentResource;
+use App\Http\Resources\PaginateResource;
+use App\Helpers\ResponseHelper;
+use App\Interfaces\DevelopmentRepositoryInterface;
+use App\Http\Requests\DevelopmentStoreRequest;
+use App\Http\Requests\DevelopmentUpdateRequest;
+
+class DevelopmentController extends Controller
+{
+    private DevelopmentRepositoryInterface $developmentRepository;
+
+    public function __construct(DevelopmentRepositoryInterface $developmentRepository) {
+        $this->developmentRepository = $developmentRepository;
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        try {
+            $developments = $this->developmentRepository->getAll(
+                $request->search,
+                $request->limit,
+                true
+            );
+
+            return ResponseHelper::jsonResponse(true, 'Data Pembangunan Berhasil Ditampilkan', DevelopmentResource::collection($developments), 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getAllPaginated(Request $request)
+    {
+        $data = $request->validate([
+            'search'        => 'nullable|string',
+            'row_per_page'  => 'required|integer',
+        ]);
+
+        try {
+            $developments = $this->developmentRepository->getAllPaginated(
+                $data['search'],
+                $data['row_per_page'],
+            );
+
+            return ResponseHelper::jsonResponse(true, 'Data Pembangunan Berhasil Ditampilkan', PaginateResource::make($developments), 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(DevelopmentStoreRequest $request)
+    {
+        $data = $request->validated();
+
+        try {
+            $development = $this->developmentRepository->create($data);
+
+            return ResponseHelper::jsonResponse(true, 'Data Pembangunan Berhasil Ditambahkan', new DevelopmentResource($development), 201);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        try {
+            $development = $this->developmentRepository->getById($id);
+
+            if(!$development){
+                return ResponseHelper::jsonResponse(false, 'Detail Data Pembangunan Tidak Ditemukan', null, 404);
+            }
+
+            return ResponseHelper::jsonResponse(true,'Detail Data Pembangunan Berhasil Ditampilkan', new DevelopmentResource($development), 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(DevelopmentUpdateRequest $request, string $id)
+    {
+        $data = $request->validated();
+
+        try {
+            $development = $this->developmentRepository->getById($id);
+
+            if(!$development){
+                return ResponseHelper::jsonResponse(false, 'Data Pembangunan Tidak Ditemukan', null, 404);
+            }
+
+            $development = $this->developmentRepository->update($id, $data);
+
+            return ResponseHelper::jsonResponse(true, 'Data Pembangunan Berhasil Diupdate', new DevelopmentResource($development), 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $development = $this->developmentRepository->getById($id);
+
+            if(!$development){
+                return ResponseHelper::jsonResponse(false, 'Data Pembangunan Tidak Ditemukan', null, 404);
+            }
+
+            $development->delete($id);
+
+            return ResponseHelper::jsonResponse(true,'Data Pembangunan Berhasil Dihapus', null, 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+}

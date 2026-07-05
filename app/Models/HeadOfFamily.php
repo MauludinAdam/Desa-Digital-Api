@@ -7,9 +7,13 @@ use App\Models\FamilyMember;
 use App\Models\SosialAssistanceRecipient;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\UUID;
 
 class HeadOfFamily extends Model
 {
+    use SoftDeletes, UUID;
+    
     protected $fillable = [
         'user_id',
         'profile_picture',
@@ -20,6 +24,14 @@ class HeadOfFamily extends Model
         'occupation',
         'marital_status',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereHas('user', function ($query) use ($search){
+            $query->where('name','like', "%{$search}%")
+                ->orWhere('email','like', "%{$search}%");
+        })->orWhere('identity_number','like',"%{$search}%");
+    }
 
     public function user()
     {

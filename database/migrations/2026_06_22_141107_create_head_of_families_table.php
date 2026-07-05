@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->string('profile_picture');
-            $table->integer('identity_number');
+            $table->string('identity_number', 16);
             $table->enum('gender',['male','female']);
             $table->date('date_birth');
             $table->string('phone_number');
