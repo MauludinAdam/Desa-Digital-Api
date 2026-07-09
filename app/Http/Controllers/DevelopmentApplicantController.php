@@ -9,13 +9,26 @@ use App\Http\Requests\DevelopmentApplicantStoreRequest;
 use App\Http\Requests\DevelopmentApplicantUpdateRequest;
 use App\Http\Resources\PaginateResource;
 use App\Helpers\ResponseHelper;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
 
-class DevelopmentApplicantController extends Controller
+class DevelopmentApplicantController extends Controller implements HasMiddleware
 {
     private DevelopmentApplicantRepositoryInterface $developmentApplicantRepository;
 
     public function __construct(DevelopmentApplicantRepositoryInterface $developmentApplicantRepository) {
         $this->developmentApplicantRepository = $developmentApplicantRepository;
+    }
+
+    public function middleware()
+    {
+        return [
+            new Middleware(PermissionMiddleware::using(['development-applicant-list|development-applicant-create|development-applicant-edit|development-applicant-delete']), only: ['index','getAllPaginated','show']),
+
+            new Middleware(PermissionMiddleware::using(['development-applicant-create']), only: ['store']),
+            new Middleware(PermissionMiddleware::using(['development-applicant-edit']), only: ['update']),
+            new Middleware(PermissionMiddleware::using(['development-applicant-delete']), only: ['destroy']),
+        ];
     }
     /**
      * Display a listing of the resource.
@@ -117,6 +130,18 @@ class DevelopmentApplicantController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $developmentApplicant = $this->developmentApplicantRepository->getById($id);
+
+            if(!$developmentApplicant){
+                return ResponseHelper::jsonResponse(false, 'Data Pendaftaran Pembangun Tidak Ditemukan', null, 404);
+            }
+
+            $developmentApplicant->delete($id);
+
+            return ResponseHelper::jsonResponse(true, 'Data Pendaftaran Pembangunan Berhasil Dihapus', null, 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 }

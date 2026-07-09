@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Development;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+
 
 /**
  * @extends Factory<Development>
@@ -18,6 +20,7 @@ class DevelopmentFactory extends Factory
     public function definition(): array
     {
         return [
+            'id'                => Str::uuid(),
             'thumbnail'         => $this->faker->imageUrl(),
             'name'              => $this->faker->randomElement(['Pembangunan Jalan','Perbaikan Jalan','Pembuatan Jembatang']),
             'description'       => $this->faker->paragraph(),

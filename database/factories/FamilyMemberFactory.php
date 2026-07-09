@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\FamilyMember;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<FamilyMember>
@@ -19,6 +20,7 @@ class FamilyMemberFactory extends Factory
     public function definition(): array
     {
         return [
+            'id'                    => Str::uuid(),
             'profile_picture'       => $this->faker->ImageUrl(),
             'identity_number'       => $this->faker->unique()->numberBetween(10000, 99999),
             'gender'                => $this->faker->randomElement(['male','female']),

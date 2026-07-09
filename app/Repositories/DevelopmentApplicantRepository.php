@@ -105,4 +105,24 @@ class DevelopmentApplicantRepository implements DevelopmentApplicantRepositoryIn
             throw new Exception($e->getMessage());
         }
     }
+
+    public function delete(
+        string $id
+    ){
+        DB::beginTransaction();
+
+        try {
+            $developmentApplicant = DevelopmentApplicant::findOrFail($id);
+
+            $developmentApplicant->deleted();
+
+            DB::commit();
+
+            return $developmentApplicant;
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw new Exception($e->getMessage());
+        }
+    }
 }

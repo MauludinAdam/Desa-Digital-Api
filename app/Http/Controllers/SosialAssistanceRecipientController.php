@@ -8,6 +8,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Resources\SosialAssistanceRecipientResource;
 use App\Http\Requests\SosialAssistanceRecipientStoreRequest;
 use App\Http\Requests\SosialAssistanceRecipientUpdateRequest;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class SosialAssistanceRecipientController extends Controller
 {
@@ -15,6 +16,17 @@ class SosialAssistanceRecipientController extends Controller
 
     public function __construct(SosialAssistanceRecipientRepositoryInterface $sosialAssistanceRecipientRepository) {
         $this->sosialAssistanceRecipientRepository = $sosialAssistanceRecipientRepository;
+    }
+
+    public function middleware()
+    {
+        return [
+            new Middleware(PermissionMiddleware::using(['sosial-assistance-recipient-list|sosial-assistance-recipient-create|sosial-assistance-recipient-edit|sosial-assistance-recipient-delete']), only: ['index', 'getAllPaginated','show']),
+
+            new Middleware(PermissionMiddleware::using(['sosial-assistance-recipient-create']), only: ['store']),
+            new Middleware(PermissionMiddleware::using(['sosial-assistance-recipient-edit']), only: ['update']).
+            new Middleware(PermissionMiddleware::using(['sosial-assistance-recipient-delete']), only: ['destroy']),
+        ];
     }
     /**
      * Display a listing of the resource.

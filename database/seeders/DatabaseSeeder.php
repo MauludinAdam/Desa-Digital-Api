@@ -3,8 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Database\Seeders\DevelopmentApplicantSeeder;
+use Database\Seeders\DevelopmentSeeder;
+use Database\Seeders\EventParticipantSeeder;
 use Database\Seeders\EventSeeder;
 use Database\Seeders\HeadOfFamilySeeder;
+use Database\Seeders\RoleSeeder;
 use Database\Seeders\SosialAssistanceRecipientSeeder;
 use Database\Seeders\SosialAssistanceSeeder;
 use Database\Seeders\UserSeeder;
@@ -22,13 +26,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+            RoleSeeder::class,
             HeadOfFamilySeeder::class,
             SosialAssistanceSeeder::class,
             SosialAssistanceRecipientSeeder::class,
             EventSeeder::class,
             EventParticipantSeeder::class,
             DevelopmentSeeder::class,
-            DevelopmentApplicant::class,
+            DevelopmentApplicantSeeder::class,
         ]);
     }
 }

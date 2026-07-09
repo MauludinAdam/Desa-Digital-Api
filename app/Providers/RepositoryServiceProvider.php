@@ -2,25 +2,31 @@
 
 namespace App\Providers;
 
+use App\Interfaces\AuthRepositoryInterface;
 use App\Interfaces\DevelopmentApplicantRepositoryInterface;
 use App\Interfaces\DevelopmentRepositoryInterface;
 use App\Interfaces\EventParticipantRepositoryInterface;
 use App\Interfaces\EventRepositoryInterface;
 use App\Interfaces\FamilyMemberRepositoryInterface;
 use App\Interfaces\HeadOfFamilyRepositoryInterface;
+use App\Interfaces\ProfileRepositoryInterface;
 use App\Interfaces\SosialAssistanceRecipientRepositoryInterface;
 use App\Interfaces\SosialAssistanceRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Models\PersonalAccessToken;
+use App\Repositories\AuthRepository;
 use App\Repositories\DevelopmentApplicantRepository;
 use App\Repositories\DevelopmentRepository;
 use App\Repositories\EventParticipantRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\FamilyMemberRepository;
 use App\Repositories\HeadOfFamilyRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\SosialAssistanceRecipientRepository;
 use App\Repositories\SosialAssistanceRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -73,6 +79,16 @@ class RepositoryServiceProvider extends ServiceProvider
             DevelopmentApplicantRepositoryInterface::class,
             DevelopmentApplicantRepository::class
         );
+
+        $this->app->bind(
+            ProfileRepositoryInterface::class,
+            ProfileRepository::class,
+        );
+
+        $this->app->bind(
+            AuthRepositoryInterface::class,
+            AuthRepository::class
+        );
     }
 
     /**
@@ -80,6 +96,6 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // 
     }
 }

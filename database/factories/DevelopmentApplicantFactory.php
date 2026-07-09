@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\DevelopmentApplicant;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<DevelopmentApplicant>
@@ -18,7 +19,8 @@ class DevelopmentApplicantFactory extends Factory
     public function definition(): array
     {
         return [
-            'status'        => $this->faker->randomElement(['pending','approval','rejected']),
+            'id'            => Str::uuid(),
+            'status'        => $this->faker->randomElement(['pending','approved','rejected']),
         ];
     }
 }

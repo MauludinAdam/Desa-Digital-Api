@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('thumbnail');
             $table->string('name');
             $table->longText('about');
-            $table->string('headmant');
+            $table->string('headman');
             $table->integer('people');
             $table->decimal('agricultural_area');
             $table->decimal('total_area');
