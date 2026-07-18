@@ -10,6 +10,7 @@ use App\Http\Resources\PaginateResource;
 use App\Http\Requests\SosialAssistanceStoreRequest;
 use App\Http\Requests\SosialAssistanceUpdateRequest;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
 class SosialAssistanceController extends Controller implements HasMiddleware
@@ -20,7 +21,7 @@ class SosialAssistanceController extends Controller implements HasMiddleware
         $this->sosialAssistanceRepository = $sosialAssistanceRepository;
     }
 
-    public function middleware()
+    public static function middleware()
     {
         return [
             new Middleware(PermissionMiddleware::using(['sosial-assistance-list|sosial-assistance-create|sosial-assistance-edit|sosial-assistance-delete']), only: ['index','getAllPaginated', 'show']),

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Interfaces\HeadOfFamilyRepositoryInterface;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\HeadOfFamilyResource;
+use App\Http\Resources\PaginateResource;
 use App\Http\Requests\HeadOfFamilyStoreRequest;
 use App\Http\Requests\HeadOfFamilyUpdateRequest;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -23,7 +24,7 @@ class HeadOfFamilyController extends Controller implements HasMiddleware
     public static function middleware()
     {
         return [
-            new Middleware(PermissionMiddleware::using(['head-of-family-list|head-of-family-create|head-of-family-edit|head-of-family-delete']), only: ['index','getAllPaginated','show']),
+            new Middleware(PermissionMiddleware::using(['head-of-family-list']), only: ['index','getAllPaginated','show']),
             new Middleware(PermissionMiddleware::using(['head-of-family-create']), only: ['store']),
             new Middleware(PermissionMiddleware::using(['head-of-family-edit']), only: ['update']),
             new Middleware(PermissionMiddleware::using(['head-of-family-delete']), only: ['destroy']),
@@ -47,8 +48,9 @@ class HeadOfFamilyController extends Controller implements HasMiddleware
         }
     }
 
-    public function geAllPaginated(Request $request)
+    public function getAllPaginated(Request $request)
     {
+        // dd("MASUK PAGINATED");
         $request = $request->validate([
             'search'   => 'nullable|string',
             'row_per_page' => 'required|integer',
@@ -62,7 +64,7 @@ class HeadOfFamilyController extends Controller implements HasMiddleware
 
             return ResponseHelper::jsonResponse(true, 'Data Kepala Keluarga Berhasil Diambil', PaginateResource::make($headOfFamilies, HeadOfFamilyResource::class), 200);
         } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(true, 'Data Kelapa Gagal Diambil', null, 500);
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
 
@@ -145,4 +147,23 @@ class HeadOfFamilyController extends Controller implements HasMiddleware
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
+
+    public function deleteSelected(Request $request)
+    {
+        try {
+            $ids = $request->ids;
+
+            if(!$ids){
+                return ResponseHelper::jsonResponse(false, 'Pilih minimal satu data', null, 400);
+            }
+
+            $this->headOfFamilyRepository->deleteSelected($ids);
+
+            return ResponseHelper::jsonResponse(true, 'Data kepala keluarga berhasil dihapus!', null, 200);
+        } catch (\Exception $e) {
+
+        return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
 }

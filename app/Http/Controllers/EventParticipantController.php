@@ -9,6 +9,7 @@ use App\Http\Resources\EventParticipantResource;
 use App\Http\Requests\EventParticipantStoreRequest;
 use App\Http\Requests\EventParticipantUpdateRequest;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
 
@@ -20,7 +21,7 @@ class EventParticipantController extends Controller implements HasMiddleware
         $this->eventParticipantRepository = $eventParticipantRepository;
     }
 
-    public function middleware()
+    public static function middleware()
     {
         return [
             new Middleware(PermissionMiddleware::using(['event-participant-list|event-participant-create|event-participant-edit|event-participant-delete']), only: ['index','getAllPaginated','show']),

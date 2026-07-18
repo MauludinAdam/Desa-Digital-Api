@@ -14,17 +14,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::create([
-        //     'name'  => 'Admin',
-        //     'email' => 'admin@gmail.com',
-        //     'password'  => bcrypt('password')
-        // ])->assignRole('admin');
-
         User::create([
-            'name'  => 'Kepala Keluarga',
-            'email' => 'headoffamily@gmail.com',
+            'name'  => 'Admin',
+            'email' => 'admin@gmail.com',
             'password'  => bcrypt('password')
-        ])->assignRole('head-of-family');
+        ])->assignRole('admin');
+
+        // User::create([
+        //     'name'  => 'Kepala Keluarga',
+        //     'email' => 'headoffamily@gmail.com',
+        //     'password'  => bcrypt('password')
+        // ])->assignRole('head-of-family');
         
         UserFactory::new()->count(10)->create();
     }

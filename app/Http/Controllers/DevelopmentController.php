@@ -10,6 +10,7 @@ use App\Interfaces\DevelopmentRepositoryInterface;
 use App\Http\Requests\DevelopmentStoreRequest;
 use App\Http\Requests\DevelopmentUpdateRequest;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
 
@@ -21,7 +22,7 @@ class DevelopmentController extends Controller implements HasMiddleware
         $this->developmentRepository = $developmentRepository;
     }
 
-    public function middleware()
+    public static function middleware()
     {
         return [
             new Middleware(PermissionMiddleware::using(['development-list|development-create|development-edit|development-delete']), only: ['index', 'getAllPaginated', 'show']),

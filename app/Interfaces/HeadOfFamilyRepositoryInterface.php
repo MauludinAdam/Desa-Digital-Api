@@ -31,4 +31,8 @@ interface HeadOfFamilyRepositoryInterface
     public function delete(
         string $id,
     );
+
+    public function deleteSelected(
+        array $ids
+    );
 }

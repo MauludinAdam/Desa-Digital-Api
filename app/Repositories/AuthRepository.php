@@ -13,7 +13,7 @@ class AuthRepository implements AuthRepositoryInterface
         if(!Auth::guard('web')->attempt($data)){
             return response([
                 'success'       => false,
-                'message'       => 'Unauthorized',
+                'message'       => 'Email atau password salah, coba ulangi lagi !',
             ], 401);
         }
 
@@ -24,6 +24,11 @@ class AuthRepository implements AuthRepositoryInterface
         return response()->json([
             'success'   => true,
             'token'     => $token,
+            'user'      => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ],
             'message'   => 'Login Success',   
         ]);
     }

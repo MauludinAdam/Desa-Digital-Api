@@ -37,7 +37,7 @@ class HeadOfFamilyRepository implements HeadOfFamilyRepositoryInterface
 
     public function getAllPaginated(
         ?string $search,
-        ?int $limit,
+        ?int $rowPerPage,
     ){
         $query = $this->getAll(
             $search,
@@ -68,12 +68,14 @@ class HeadOfFamilyRepository implements HeadOfFamilyRepositoryInterface
                 'name'      => $data['name'],
                 'email'      => $data['email'],
                 'password'      => bcrypt($data['password']),
-            ])->assignRole('head-of-family');
+            ])->assignRole('user');
 
             $headOfFamily = new HeadOfFamily;
 
             $headOfFamily->user_id  = $user->id;
-            $headOfFamily->profile_picture = $data['profile_picture']->store('assets/head-of-family','public');
+            if(isset($data['profile_picture'])){
+                $headOfFamily->profile_picture = $data['profile_picture']->store('assets/head-of-family','public');
+            }
             $headOfFamily->identity_number = $data['identity_number'];
             $headOfFamily->gender = $data['gender'];
             $headOfFamily->date_birth = $data['date_birth'];
@@ -100,9 +102,14 @@ class HeadOfFamilyRepository implements HeadOfFamilyRepositoryInterface
         DB::beginTransaction();
 
         try {
-            $headOfFamily = HeadOfFamily::find($id);
+            $headOfFamily = HeadOfFamily::findOrFail($id);
 
             if(isset($data['profile_picture'])){
+
+                if($headOfFamily->profile_picture){
+                    Storage::disk('public')->delete($headOfFamily->profile_picture);
+                }
+                
                 $headOfFamily->profile_picture = $data['profile_picture']->store('assets/head-of-families', 'public');
             }
             $headOfFamily->identity_number = $data['identity_number'];
@@ -147,6 +154,22 @@ class HeadOfFamilyRepository implements HeadOfFamilyRepositoryInterface
             DB::rollback();
 
             throw new Exception($e->getMessage());
+        }
+    }
+
+    public function deleteSelected(array $ids){
+        DB::beginTransaction();
+
+        try {
+           $headOfFamily = HeadOfFamily::whereIn('id', $ids)->delete();
+
+            DB::commit();
+
+            return $headOfFamily;
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            throw new Exception(false, $e->getMessage());
         }
     }
 }

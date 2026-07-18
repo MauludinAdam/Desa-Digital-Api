@@ -15,11 +15,11 @@ class HeadOfFamilySeeder extends Seeder
      */
     public function run(): void
     {
-        UserFactory::new()->count(5)->create()->each(function ($user){
+        UserFactory::new()->count(10)->create()->each(function ($user){
             $headOfFamily = HeadOfFamilyFactory::new()->create([
                 'user_id'   => $user->id]);
 
-                FamilymemberFactory::new()->count(5)->create(['head_of_family_id' => $headOfFamily->id, 'user_id' => UserFactory::new()->create()->id]);
+                FamilymemberFactory::new()->count(10)->create(['head_of_family_id' => $headOfFamily->id, 'user_id' => UserFactory::new()->create()->id]);
         });
     }
 }

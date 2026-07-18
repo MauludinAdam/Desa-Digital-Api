@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('head_of_family_id')->constrained('head_of_families')->onDelete('cascade');
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->string('profile_picture');
-            $table->integer('identity_number');
+            $table->string('identity_number');
             $table->enum('gender',['male','female']);
             $table->date('date_birth');
             $table->string('phone_number');

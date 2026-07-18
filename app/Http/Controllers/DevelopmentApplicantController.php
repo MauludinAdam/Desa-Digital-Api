@@ -10,6 +10,7 @@ use App\Http\Requests\DevelopmentApplicantUpdateRequest;
 use App\Http\Resources\PaginateResource;
 use App\Helpers\ResponseHelper;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
 class DevelopmentApplicantController extends Controller implements HasMiddleware
@@ -20,7 +21,7 @@ class DevelopmentApplicantController extends Controller implements HasMiddleware
         $this->developmentApplicantRepository = $developmentApplicantRepository;
     }
 
-    public function middleware()
+    public static function middleware()
     {
         return [
             new Middleware(PermissionMiddleware::using(['development-applicant-list|development-applicant-create|development-applicant-edit|development-applicant-delete']), only: ['index','getAllPaginated','show']),

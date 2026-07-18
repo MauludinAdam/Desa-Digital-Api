@@ -21,6 +21,7 @@ class HeadOfFamilyFactory extends Factory
     {
         return [
             'id'                => Str::uuid() ,
+            // 'user_id'           => User::factory(),
             'profile_picture'   => $this->faker->imageUrl(),
             'identity_number'   => $this->faker->unique()->numberBetween(10000, 99999),
             'gender'            => $this->faker->randomElement(['male','female']),

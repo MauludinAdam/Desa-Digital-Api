@@ -23,8 +23,9 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('user', UserController::class);
     Route::get('user/all/paginated', [UserController::class, 'getAllPaginated']);
 
-    Route::apiResource('head-of-family', HeadOfFamilyController::class);
+    Route::delete("/head-of-family/delete-selected", [HeadOfFamilyController::class,'deleteSelected']);
     Route::get('head-of-family/all/paginated', [HeadOfFamilyController::class, 'getAllPaginated']);
+    Route::apiResource('head-of-family', HeadOfFamilyController::class);
 
     Route::apiResource('family-member', FamilyMemberController::class);
     Route::get('family-member/all/paginated', [FamilyMemberController::class, 'getAllPaginated']);
