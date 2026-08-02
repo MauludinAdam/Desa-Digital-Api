@@ -1,17 +1,17 @@
-<?php
+<?php 
 
-namespace  App\Helpers;
+namespace App\Helpers;
 
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\jsonResponse;
 
 class ResponseHelper
 {
-    public static function jsonResponse($success, $message, $data, $statusCode):JsonResponse
+    public static function jsonResponse($success, $message, $data, $statusCode):jsonResponse
     {
         return response()->json([
-            'success'   => $success,
-            'message'   => $message,
-            'data'      => $data,
+            'success'       => $success,
+            'message'       => $message,
+            'data'          => $data,
         ], $statusCode);
     }
 }

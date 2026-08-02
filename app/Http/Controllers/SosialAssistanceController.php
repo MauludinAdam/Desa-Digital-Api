@@ -58,11 +58,11 @@ class SosialAssistanceController extends Controller implements HasMiddleware
 
         try {
             $sosialAssistances = $this->sosialAssistanceRepository->getAllPaginated(
-                $request['search'],
+                $request['search'] ?? null,
                 $request['row_per_page'],
             );
 
-            return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Diambil', PaginateResource::make($sosialAssistances, SosialAssistanceResourec::class), 200);
+            return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Diambil', PaginateResource::make($sosialAssistances, SosialAssistanceResource::class), 200);
         } catch (\Exception $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
@@ -140,6 +140,23 @@ class SosialAssistanceController extends Controller implements HasMiddleware
             $sosialAssistance = $this->sosialAssistanceRepository->delete($id);
 
             return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Dihapus', null, 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function deleteSelected(Request $request)
+    {
+        try {
+            $ids = $request->ids;
+
+            if(!$ids) {
+                return ResponseHelper::jsonResponse(false, 'Pilih minimal stau data', null, 400);
+            }
+
+            $this->sosialAssistanceRepository->deleteSelected($ids);
+
+            return ResponseHelper::jsonResponse(true, 'Data bantuan sosial berhasil dihapus.!', null, 200);
         } catch (\Exception $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }

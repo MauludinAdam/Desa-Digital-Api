@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\SosialAssistance;
+use App\Models\SosialAssistanceCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 // use Illuminate\Database\Seeder;
@@ -21,8 +22,8 @@ class SosialAssistanceFactory extends Factory
         return [
             'id'            => Str::uuid(),
             'thumbnail'     => $this->faker->imageUrl(),
-            'name'          => $this->faker->randomElement(['Bantuan Pangan', 'Bantuan Tunai', 'Bantuan Bahan Bakar Bersubsidi', 'Bantuan Kesehatan']),
-            'category'      => $this->faker->randomElement(['staple','cash','subsidized fuel','health']),
+            'name'          => $this->faker->name(),
+            'category_id'   => SosialAssistanceCategory::inRandomOrder()->value('id'),
             'amount'        => $this->faker->randomFloat(2, 10000, 100000),
             'provider'      => $this->faker->company,
             'description'   => $this->faker->sentence,

@@ -10,7 +10,8 @@ use App\Interfaces\EventRepositoryInterface;
 use App\Interfaces\FamilyMemberRepositoryInterface;
 use App\Interfaces\HeadOfFamilyRepositoryInterface;
 use App\Interfaces\ProfileRepositoryInterface;
-use App\Interfaces\SosialAssistanceRecipientRepositoryInterface;
+use App\Interfaces\SosialAssistanceApplicantRepositoryInterface;
+use App\Interfaces\SosialAssistanceCategoryRepositoryInterface;
 use App\Interfaces\SosialAssistanceRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\PersonalAccessToken;
@@ -22,7 +23,8 @@ use App\Repositories\EventRepository;
 use App\Repositories\FamilyMemberRepository;
 use App\Repositories\HeadOfFamilyRepository;
 use App\Repositories\ProfileRepository;
-use App\Repositories\SosialAssistanceRecipientRepository;
+use App\Repositories\SosialAssistanceApplicantRepository;
+use App\Repositories\SosialAssistanceCategoryRepository;
 use App\Repositories\SosialAssistanceRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
@@ -50,14 +52,18 @@ class RepositoryServiceProvider extends ServiceProvider
             FamilyMemberRepository::class
         );
 
+        $this->app->bind(SosialAssistanceCategoryRepositoryInterface::class,
+        SosialAssistanceCategoryRepository::class
+        );
+
         $this->app->bind(
             SosialAssistanceRepositoryInterface::class, 
             SosialAssistanceRepository::class
         );
 
         $this->app->bind(
-            SosialAssistanceRecipientRepositoryInterface::class, 
-            SosialAssistanceRecipientRepository::class
+            SosialAssistanceApplicantRepositoryInterface::class, 
+            SosialAssistanceApplicantRepository::class
         );
 
         $this->app->bind(

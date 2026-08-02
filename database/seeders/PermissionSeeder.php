@@ -30,6 +30,14 @@ class PermissionSeeder extends Seeder
             'delete',
         ],
 
+        'sosial-assistance-category' => [
+            'menu',
+            'list',
+            'create',
+            'edit',
+            'delete',
+        ],
+
         'sosial-assistance' => [
             'menu',
             'list',
@@ -38,39 +46,7 @@ class PermissionSeeder extends Seeder
             'delete',
         ],
 
-        'sosial-assistance-recipient'   => [
-            'menu',
-            'list',
-            'create',
-            'edit',
-            'delete',
-        ],
-
-        'event'     => [
-            'menu',
-            'list',
-            'create',
-            'edit',
-            'delete',
-        ],
-
-        'event-participant' => [
-            'menu',
-            'list',
-            'create',
-            'edit',
-            'delete',
-        ],
-
-        'development' => [
-            'menu',
-            'list',
-            'create',
-            'edit',
-            'delete',
-        ],
-
-        'development-applicant' => [
+        'sosial-assistance-applicant'   => [
             'menu',
             'list',
             'create',
@@ -91,16 +67,40 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         foreach($this->permissions as $key => $value) {
+    
             foreach ($value as $permission){
                 Permission::firstOrCreate([
                     'name'  => $key . '-' . $permission,
                     'guard_name' => 'web'
                 ]);
             }
-
-              $admin = Role::findByName('admin', 'web');
-
-            $admin->syncPermissions(Permission::all());
         }
-    }
+            
+
+            // Role Admin
+              $admin = Role::findByName('admin', 'web');
+              $admin->syncPermissions(Permission::all());
+
+            //   Role Kepala Desa
+            $headman = Role::findByName('headman','web');
+            $headman->syncPermissions([
+                'dashboard-menu',
+                'head-of-family-list',
+                'family-member-list',
+                'sosial-assistance-list',
+                'sosial-assistance-applicant-list',
+                'sosial-assistance-applicant-edit',
+            ]);
+
+            // User
+            $user = Role::findByName('user','web');
+            $user->syncPermissions([
+                'dashboard-menu',
+                'profile-menu',
+                'profile-edit',
+            ]);
+        }
+
+        // dd(Permission::pluck('name')->toArray());
+    
 }

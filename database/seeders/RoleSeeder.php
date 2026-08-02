@@ -32,5 +32,10 @@ class RoleSeeder extends Seeder
             'name'          => 'family-member',
             'guard_name'    => 'web',
         ]);
+
+        Role::firstOrCreate([
+            'name'          => 'headman',
+            'guard_name'    => 'web',
+        ]);     
     }
 }

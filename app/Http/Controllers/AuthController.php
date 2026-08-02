@@ -1,33 +1,43 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Interfaces\AuthRepositoryInterface;
-use App\Http\Requests\LoginStoreRequest;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AuthController extends Controller
 {
-    private AuthRepositoryInterface $authRepository;
+   public function login(LoginRequest $request)
+   {
+        if(!Auth::attempt($request->only('email','password'))){
+            return response()->json([
+                'message' => 'Email atau password salah',
+            ], 400);
+        }
 
-    public function __construct(AuthRepositoryInterface $authRepository) {
-        $this->authRepository = $authRepository;
-    }
+        $user = Auth::user();
 
-    public function login(LoginStoreRequest $request)
-    {
-        $data = $request->validated();
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return $this->authRepository->login($data);
-    }
+        return response()->json([
+            'message' => 'Login berhasil.',
+            'token'     => $token,
+            'data'      => $user,
+        ]);
+   }
 
-    public function logout()
-    {
-        return $this->authRepository->logout();
-    }
+   public function logout(Request $request)
+   {
+        $request->user()->currentAccessToke()->delete();
 
-    public function me()
-    {
-        return $this->authRepository->me();
-    }
+        return response()->json([
+            'message'   => 'Logout berhasi',
+        ]);
+   }
+
+   public function me()
+   {
+        return response()->json($request->user());
+   }
 }

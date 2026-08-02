@@ -14,7 +14,7 @@ class SosialAssistanceSeeder extends Seeder
      */
     public function run(): void
     {
-        SosialAssistanceFactory::new()->count(5)->create();
+        SosialAssistanceFactory::new()->count(15)->create();
         // SosialAssistance::factory()->count(5)->create();
     }
 }

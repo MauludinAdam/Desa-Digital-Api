@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\SosialAssistanceRecipient;
+use App\Models\SosialAssistanceApplicant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\UUID;
@@ -33,8 +33,13 @@ class SosialAssistance extends Model
             ->orWhere('amount', 'like', "%{$search}%");
     }
 
-    public function sosialAssistanceRecepient()
+    public function sosialAssistanceApplicant()
     {
-        return $this->hasMany(SosialAssistanceRecipient::class);
+        return $this->hasMany(SosialAssistanceApplicant::class);
+    }
+
+    public function sosialAssistanceCategory()
+    {
+        return $this->belongsTo(SosialAssistanceCategory::class);
     }
 }
