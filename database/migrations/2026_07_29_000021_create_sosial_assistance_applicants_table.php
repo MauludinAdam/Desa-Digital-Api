@@ -20,7 +20,6 @@ return new class extends Migration
             $table->longText('reason');
             $table->longText('rejection_reason')->nullable();
             $table->string('account_number',20)->nullable();
-            $table->string('proof');
             $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->timestamps();
             $table->softDeletes();

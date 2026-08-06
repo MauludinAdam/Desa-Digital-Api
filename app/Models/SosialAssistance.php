@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\SosialAssistanceApplicant;
+use App\Models\SosialAssistanceCategory;
+use App\Models\Category;
+use App\Traits\UUID;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\UUID;
 
 class SosialAssistance extends Model
 {
     use SoftDeletes, HasFactory, UUID;
 
     protected $fillable = [
-        'thumbnail',
         'name',
-        'category',
+        'category_id',
         'amount',
         'provider',
         'description',
@@ -38,8 +39,8 @@ class SosialAssistance extends Model
         return $this->hasMany(SosialAssistanceApplicant::class);
     }
 
-    public function sosialAssistanceCategory()
+    public function category()
     {
-        return $this->belongsTo(SosialAssistanceCategory::class);
+        return $this->belongsTo(SosialAssistanceCategory::class, 'category_id');
     }
 }

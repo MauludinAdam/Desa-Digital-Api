@@ -20,7 +20,7 @@ class SosialAssistanceApplicant extends Model
         'amount',
         'reason',
         'account_number',
-        'proof',
+        'rejection_reason',
         'status',
     ];
 

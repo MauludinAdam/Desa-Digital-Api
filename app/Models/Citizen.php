@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\CitizenDocument;
+use App\Models\Complaint;
 use App\Models\Education;
 use App\Models\FamilyCard;
 use App\Models\FamilyMember;
@@ -10,8 +11,8 @@ use App\Models\Letter;
 use App\Models\Occupation;
 use App\Models\Religion;
 use App\Traits\UUID;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Citizen extends Model
 {
@@ -75,5 +76,10 @@ use SoftDeletes, UUID;
     public function familyCard()
     {
         return $this->belongsTo(FamilyCard::class);
+    }
+
+    public function complaint()
+    {
+        return $this->hasMany(Complaint::class);
     }
 }

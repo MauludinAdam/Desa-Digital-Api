@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('sosial_assistances', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('thumbnail');
             $table->string('name');
             $table->foreignUuid('category_id')->constrained('sosial_assistance_categories')->OnDelete('cascade');
             $table->decimal('amount');

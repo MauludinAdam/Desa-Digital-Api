@@ -1,12 +1,21 @@
 <?php
 
+use App\Http\Controllers\AnaliticsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\CitizenDocumentController;
-use App\Http\Controllers\FamilyCardController;
 
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EducationController;
+use App\Http\Controllers\FamilyCardController;
+use App\Http\Controllers\LetterAttachmentController;
 use App\Http\Controllers\LetterController;
+use App\Http\Controllers\LetterTypeController;
+use App\Http\Controllers\OccupationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReligionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SosialAssistanceApplicantController;
 use App\Http\Controllers\SosialAssistanceCategoryController;
 use App\Http\Controllers\SosialAssistanceController;
@@ -17,18 +26,75 @@ use Illuminate\Support\Facades\Route;
 
 
 
-
-
 Route::middleware('auth:sanctum')->group(function (){
-    
-    Route::apiResource('/citizen', CitizenController::class);
-    Route::apiResource('/family-card', FamilyCardController::class);
-    Route::apiResource('/citizen-document', CitizenDocumentController::class);
-    Route::apiResource('/letter', LetterController::class);
+    Route::prefix('reports')->group(function(){
+        Route::get('/citizen', [ReportController::class, 'citizen']);
+        Route::get('/family-card', [ReportController::class, 'familyCard']);
+        Route::get('/complaint', [ReportController::class, 'complaint']);
+        Route::get('/sosial-assistance-applicant', [ReportController::class, 'sosialAssistanceApplicant']);
+    });
 
-    Route::get('profile', [ProfileController::class, 'index']);
-    Route::post('profile', [ProfileController::class, 'store']);
-    Route::put('profile', [ProfileController::class, 'update']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/analitic', [AnaliticsController::class, 'index']);
+
+    Route::apiResource('/citizen', CitizenController::class)
+    ->middlewareFor(['index', 'show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/family-card', FamilyCardController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/citizen-document', CitizenDocumentController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/letter', LetterController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/letter-type', LetterTypeController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/letter-attachment', LetterAttachmentController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/occupation', OccupationController::class)
+    ->middleware('role:admin');
+
+    Route::apiResource('/education', EducationController::class)
+    ->middleware('role:admin');
+
+    Route::apiResource('/religion', ReligionController::class)
+    ->middleware('role:admin');
+
+    Route::apiResource('/sosial-assistance-category', SosialAssistanceCategoryController::class)
+    ->middleware('role:admin');
+
+    Route::apiResource('/sosial-assistance', SOsialAssistanceController::class)
+    ->middleware('role:admin');
+
+    Route::apiResource('/sosial-assistance-applicant', SosialAssistanceApplicantController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+    Route::patch('/sosial-assistance-applicant/{id}/approve', [SosialAssistanceApplicantController::class, 'approve'])
+    ->middleware('role:headman');
+    Route::patch('/sosial-assistance-applicant/{id}/reject', [SosialAssistanceApplicantController::class, 'reject'])
+    ->middleware('role:headman');
+
+    Route::apiResource('/complaint', ComplaintController::class)
+    ->middleware('role:admin');
+
+    Route::get('profile', [ProfileController::class, 'index'])
+    ->middleware('role:admin|headman');
+
+    Route::post('profile', [ProfileController::class, 'store'])
+    ->middleware('role:admin');
+
+    Route::put('profile', [ProfileController::class, 'update'])
+    ->middleware('role:admin');
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');

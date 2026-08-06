@@ -156,7 +156,7 @@ class LetterController extends Controller
             $letter = Letter::find($id);
 
             if(!$letter){
-                return Responsehelper::jsonResponse(false, 'Data surat tidai ditemukan', null, 404);
+                return ResponseHelper::jsonResponse(false, 'Data surat tidai ditemukan', null, 404);
             }
 
             $letter->delete();

@@ -10,5 +10,7 @@ class Education extends Model
 {
     use SoftDeletes, UUID;
 
-    protected $fillabale = ['name'];
+    protected $table = 'educations';
+
+    protected $fillable = ['name'];
 }

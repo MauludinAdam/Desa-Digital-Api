@@ -23,16 +23,7 @@ class RoleSeeder extends Seeder
             'guard_name'  =>  'web',
         ]);
 
-        Role::firstOrCreate([
-            'name'      => 'head-of-family',
-            'guard_name'    => 'web',
-        ]);
-
-        Role::firstOrCreate([
-            'name'          => 'family-member',
-            'guard_name'    => 'web',
-        ]);
-
+    
         Role::firstOrCreate([
             'name'          => 'headman',
             'guard_name'    => 'web',

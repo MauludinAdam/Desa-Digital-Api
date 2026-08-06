@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Interfaces\AuthRepositoryInterface;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\AuthResource;
+use App\Helpers\ResponseHelper;
 
 class AuthController extends Controller
 {
@@ -20,16 +22,20 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'message' => 'Login berhasil.',
-            'token'     => $token,
-            'data'      => $user,
-        ]);
+       return ResponseHelper::jsonResponse(
+        true,
+        'Login Berhasil',
+        [
+            'token' => $token,
+            'data'  => new AuthResource($user),
+            
+        ], 200
+       );
    }
 
    public function logout(Request $request)
    {
-        $request->user()->currentAccessToke()->delete();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message'   => 'Logout berhasi',

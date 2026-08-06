@@ -3,69 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Interfaces\SosialAssistanceRepositoryInterface;
+use App\Models\SosialAssistance;
 use App\Helpers\ResponseHelper;
-use App\Http\Resources\SosialAssistanceResource;
 use App\Http\Resources\PaginateResource;
-use App\Http\Requests\SosialAssistanceStoreRequest;
-use App\Http\Requests\SosialAssistanceUpdateRequest;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Spatie\Permission\Middleware\PermissionMiddleware;
-
-class SosialAssistanceController extends Controller implements HasMiddleware
+use App\Http\Resources\SosialAssistanceResource;
+use App\Http\Requests\SosialAssistance\SosialAssistanceStoreRequest;
+use App\Http\Requests\SosialAssistance\SosialAssistanceUpdateRequest;
+class SosialAssistanceController extends Controller
 {
-    private SosialAssistanceRepositoryInterface $sosialAssistanceRepository;
-
-    public function __construct(SosialAssistanceRepositoryInterface $sosialAssistanceRepository) {
-        $this->sosialAssistanceRepository = $sosialAssistanceRepository;
-    }
-
-    public static function middleware()
-    {
-        return [
-            new Middleware(PermissionMiddleware::using(['sosial-assistance-list|sosial-assistance-create|sosial-assistance-edit|sosial-assistance-delete']), only: ['index','getAllPaginated', 'show']),
-
-            new Middleware(PermissionMiddleware::using(['sosial-assistance-create']), only: ['store']),
-            new Middleware(PermissionMiddleware::using(['sosial-assistance-edit']), only: ['update']),
-            new Middleware(PermissionMiddleware::using(['sosial-assistance-delete']), only: ['destroy'])
-        ];
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        try {
-            $sosialAssistances = $this->sosialAssistanceRepository->getAll(
-                $request->search,
-                $request->limit,
-                true
-            );
-
-           return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Diambil', SosialAssistanceResource::collection($sosialAssistances), 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
-        }
-    }
-
-    public function getAllPaginated(Request $request)
-    {
-        $request = $request->validate([
-            'search'        =>  'nullable|string',
-            'row_per_page'  => 'required|integer',
+        $request->validate([
+            'row_per_page'  => 'nullable|integer|min:5|max:100'
         ]);
 
-        try {
-            $sosialAssistances = $this->sosialAssistanceRepository->getAllPaginated(
-                $request['search'] ?? null,
-                $request['row_per_page'],
-            );
+        $rowPerPage = $request->input('row_per_page');
+        $search = $request->input('search');
 
-            return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Diambil', PaginateResource::make($sosialAssistances, SosialAssistanceResource::class), 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        $sosialAssistance = SosialAssistance::with([
+            'category',
+        ])->when($search, function($query) use ($search) {
+            $query->search($search);
+        })->orderBy('created_at','desc')->paginate($rowPerPage);
+
+        if($sosialAssistance->isEmpty()){
+            return ResponseHelper::jsonResponse(false, 'Data bantuan sosial belum ada.', null, 404);
         }
+
+        return ResponseHelper::jsonResponse(true, 'Data sosial assisten berhasil diambil', PaginateResource::make($sosialAssistance, SosialAssistanceResource::class), 200);
     }
 
     /**
@@ -73,13 +41,13 @@ class SosialAssistanceController extends Controller implements HasMiddleware
      */
     public function store(SosialAssistanceStoreRequest $request)
     {
-        $request = $request->validated();
+        $data = $request->validated();
 
         try {
-            $sosialAssistance = $this->sosialAssistanceRepository->create($request);
+            $sosialAssistance = SosialAssistance::create($data);
 
-            return ResponseHelper::jsonResponse(true, 'Bantuan Sosial Berhasil Ditambahkan', new SosialAssistanceResource($sosialAssistance), 201);
-        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(true, 'Data bantuan sosial berhasil ditambahkan', new SosialAssistanceResource($sosialAssistance), 201);
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
@@ -90,14 +58,14 @@ class SosialAssistanceController extends Controller implements HasMiddleware
     public function show(string $id)
     {
         try {
-            $sosialAssistance = $this->sosialAssistanceRepository->getById($id);
+            $sosialAssistance = SosialAssistance::find($id);
 
-            if(empty($sosialAssistance)){
-                return ResponseHelper::jsonResponse(false, 'Data Detail Bantuan Sosial Tidak Ditemukan', null, 404);
+            if(!$sosialAssistance){
+                return ResponseHelper::jsonResponse(false, 'Data bantuan sosial tidak ditemukan', null, 404);
             }
 
-            return ResponseHelper::jsonResponse(true, 'Data Detail Bantuan Sosial Berhasil Diambil', new SosialAssistanceResource($sosialAssistance), 200);
-        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(true, 'Data bantuan sosial berhasil diambil', new SosialAssistanceResource($sosialAssistance), 200);
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
@@ -107,22 +75,21 @@ class SosialAssistanceController extends Controller implements HasMiddleware
      */
     public function update(SosialAssistanceUpdateRequest $request, string $id)
     {
-        $request = $request->validated();
+        $data = $request->validated();
 
-         try {
-            $sosialAssistance = $this->sosialAssistanceRepository->getById($id);
+        try {
+            $sosialAssistance = SosialAssistance::findOrFail($id);
 
             if(!$sosialAssistance){
-                return ResponseHelper::jsonResponse(false, 'Data Bantuan Sosial Tidak Ditemukan', null, 404);
+                return ResponseHelper::jsonResponse(false, 'Data bantuan sosial tidak ditemukan', null, 404);
             }
 
-            $sosialAssistance =$this->sosialAssistanceRepository->update($id, $request);
+            $sosialAssistance->update($data);
 
-            return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Diupdate', new SosialAssistanceResource($sosialAssistance), 200);
-
-         } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(true, 'Data bantuan sosial berhasil diperbarui', new SosialAssistanceResource($sosialAssistance), 200);
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
-         }
+        }
     }
 
     /**
@@ -131,33 +98,12 @@ class SosialAssistanceController extends Controller implements HasMiddleware
     public function destroy(string $id)
     {
         try {
-            $sosialAssistance = $this->sosialAssistanceRepository->getById($id);
+            $sosialAssistance = SosialAssistance::find($id);
 
-            if(empty($sosialAssistance)){
-                return ResponseHelper::jsonResponse(false, 'Data Bantuan Sosial Tidak Ditemukan', null, 404);
-            }
-            
-            $sosialAssistance = $this->sosialAssistanceRepository->delete($id);
+            $sosialAssistance->delete();
 
-            return ResponseHelper::jsonResponse(true, 'Data Bantuan Sosial Berhasil Dihapus', null, 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
-        }
-    }
-
-    public function deleteSelected(Request $request)
-    {
-        try {
-            $ids = $request->ids;
-
-            if(!$ids) {
-                return ResponseHelper::jsonResponse(false, 'Pilih minimal stau data', null, 400);
-            }
-
-            $this->sosialAssistanceRepository->deleteSelected($ids);
-
-            return ResponseHelper::jsonResponse(true, 'Data bantuan sosial berhasil dihapus.!', null, 200);
-        } catch (\Exception $e) {
+            return ResponseHelper::jsonResponse(true, 'Data bantuan sosial berhasil dihapus', null, 200);
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }

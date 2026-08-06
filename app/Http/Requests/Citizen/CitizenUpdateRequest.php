@@ -26,7 +26,7 @@ class CitizenUpdateRequest extends FormRequest
         return [
             'family_card_id'        => 'nullable|string|max:255',
             'full_name'             => 'required|string|max:255',
-            'nik'                   => 'required|digits:16', Rule::unique('citizens','nik')->ignore($id),
+            'nik'                   => 'nullable|digits:16',
             'gender'                => 'required|in:male,female',
             'place_of_birth'        => 'required|string|max:255',
             'date_of_birth'         => 'required|date',

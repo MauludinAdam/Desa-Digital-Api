@@ -36,6 +36,10 @@ class CitizenController extends Controller
             $query->search($search);
         })->orderBy('created_at','desc')->paginate($rowPerPage); 
 
+        if($citizens->isEmpty()){
+            return ResponseHelper::jsonResponse(false, 'Data penduduk tidak ditemukan', null, 404);
+        }
+
         return ResponseHelper::jsonResponse(true,
             'Data penduduk berhasil diambil',PaginateResource::make($citizens,CitizenResource::class), 200
         );
@@ -90,7 +94,7 @@ class CitizenController extends Controller
     {
         $data = $request->validated();
         try {
-            $citizen = Citizen::findOrFail($id);
+            $citizen = Citizen::find($id);
 
             $citizen->update($data);
 
