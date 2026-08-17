@@ -19,6 +19,19 @@ class FamilyCardResource extends JsonResource
             'id'                    => $this->id,
             'family_card_number'    => $this->family_card_number,
             'head_of_family_id'     => $this->head_of_family_id,
+            'head_of_family'     => $this->whenLoaded('headOfFamily'),
+
+            'family_members'        => $this->whenLoaded('familyMembers', function () {
+                return $this->familyMembers->map(function ($familyMember){
+                    return [
+                        'id'    => $familyMember->id,
+                        'citizen_id'    => $familyMember->citizen_id,
+                        'relationship'  => $familyMember->relationship,
+                        'citizen'   => $familyMember->citizen,
+                    ];
+                });
+            }),
+
             'address'               => $this->address,
             'rt'                    => $this->rt,
             'rw'                    => $this->rw,

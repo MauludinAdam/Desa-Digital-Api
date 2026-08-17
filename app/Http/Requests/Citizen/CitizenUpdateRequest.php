@@ -34,10 +34,10 @@ class CitizenUpdateRequest extends FormRequest
             'occupation_id'         => 'nullable|exists:occupations,id',
             'religion_id'           => 'nullable|exists:religions,id',
             'education_id'          => 'nullable|exists:educations,id',
-            'marital_status'        => 'required|in:single,married',
+            'marital_status'        => 'required|in:single,married,widow,widower',
             'blood_type'            => 'required|in:A,AB,B,O',
             'email'                 => 'required|email', Rule::unique('citizens','email')->ignore($id),
-            'nationality'           => 'required|in:wni,wna',
+            'nationality'           => 'required|in:WNA,WNI',
             'status'                => 'required|in:active,moved,deceased'
         ];
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\FamilyCardController;
+use App\Http\Controllers\FamilyMemberController;
 use App\Http\Controllers\LetterAttachmentController;
 use App\Http\Controllers\LetterController;
 use App\Http\Controllers\LetterTypeController;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::middleware('auth:sanctum')->group(function (){
     Route::prefix('reports')->group(function(){
         Route::get('/citizen', [ReportController::class, 'citizen']);
@@ -37,11 +39,17 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/analitic', [AnaliticsController::class, 'index']);
 
+    Route::get('/citizen/head-of-family-options', [CitizenController::class, 'headOfFamilyOptions'])
+    ->middleware('role:admin|headman');
     Route::apiResource('/citizen', CitizenController::class)
     ->middlewareFor(['index', 'show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
 
     Route::apiResource('/family-card', FamilyCardController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/family-member', FamilyMemberController::class)
     ->middlewareFor(['index','show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
 

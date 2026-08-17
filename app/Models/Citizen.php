@@ -78,8 +78,19 @@ use SoftDeletes, UUID;
         return $this->belongsTo(FamilyCard::class);
     }
 
+    public function familyCardsAsHead()
+    {
+        return $this->hasMany(FamilyCard::class, 'head_of_family_id');
+    }
+
     public function complaint()
     {
         return $this->hasMany(Complaint::class);
     }
+
+    public function familyMembers()
+    {
+        return $this->hasMany(FamilyMember::class);
+    }
+
 }

@@ -31,7 +31,8 @@ class FamilyCardController extends Controller
 
         // query dengan relasi
         $familyCard = FamilyCard::with([
-            'headOfFamily'
+            'headOfFamily',
+            'familyMembers.citizen'
         ])->when($search, function ($query) use ($search){
             $query->search($search);
         })->orderBy('created_at','desc')->paginate($rowPerPage);
@@ -61,7 +62,10 @@ class FamilyCardController extends Controller
     public function show(string $id)
     {
         try {
-            $familyCard = FamilyCard::with(['headOfFamily'])->find($id);
+            $familyCard = FamilyCard::with([
+                'headOfFamily',
+                'familyMembers.citizen'
+                ])->findOrFail($id);
 
             if(!$familyCard){
                 return ResponseHelper::jsonResponse(false, 'Data nomor kartu keluarga tidak ditemukan', null, 404);

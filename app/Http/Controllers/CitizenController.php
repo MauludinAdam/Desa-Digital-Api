@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Citizen;
+use App\Models\FamilyCard;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\CitizenResource;
 use App\Http\Resources\PaginateResource;
 use App\Http\Requests\Citizen\CitizenStoreRequest;
 use App\Http\Requests\Citizen\CitizenUpdateRequest;
+use Illuminate\Support\Facades\DB;
 
 
 class CitizenController extends Controller
@@ -45,19 +47,41 @@ class CitizenController extends Controller
         );
     }
 
+    public function headOfFamilyOptions()
+    {
+        try {
+            $citizens = Citizen::whereDoesntHave('familyCardsAsHead')
+            ->orderBy('full_name','asc')
+            ->get();
+
+            return ResponseHelper::jsonResponse(true, 'Data calon kepala keluarga  berhasil diambil', CitizenResource::collection($citizens), 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(CitizenStoreRequest $request)
     {
-        $data = $request->validated();
         try {
+            
+            DB::beginTransaction();
+            
+            $data = $request->validated();
+
             $citizen = Citizen::create($data);
+
+            
+            DB::commit();
 
             return ResponseHelper::jsonResponse(true,
                 'Data penduduk berhasil ditambahkan.', new CitizenResource($citizen), 201
             );
         } catch (\Throwable $e) {
+            DB::rollback();
+
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }

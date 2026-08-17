@@ -23,22 +23,42 @@ class CitizenStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'family_card_id'    => 'nullable|exists:family_card,id',
-            'full_name'         => 'required|string|max:255',
-            'nik'               => 'required|digits:16|unique:citizens,nik',
-            'gender'            => 'required|in:male,female',
-            'place_of_birth'    => 'required|string|max:255',
-            'date_of_birth'     => 'required|date',
-            'phone_number'      => 'required|string|max:12',
-            'occupation_id'     => 'nullable|exists:occupations,id',
-            'religion_id'       => 'nullable|exists:religions,id',
-            'education_id'      => 'nullable|exists:educations,id',
-            'marital_status'    => 'required|in:married,single,widower,widow',
-            'blood_type'        => 'required|in:A,AB,B,O',
-            'email'             => 'nullable|string|email|unique:citizens,email',
-            'nationality'       => 'required|in:wni,wna',
-            'status'            => 'required|in:active,moved,deceased'
+            'family_card_id'            => 'nullable|exists:family_cards,id',
+            'family_card_number'        => 'nullable|digits:16|unique:family_cards,family_card_number',
+            'create_new_family_card'    => 'required|boolean',
+            'full_name'                 => 'required|string|max:255',
+            'nik'                       => 'required|digits:16|unique:citizens,nik',
+            'gender'                    => 'required|in:male,female',
+            'place_of_birth'            => 'required|string|max:255',
+            'date_of_birth'             => 'required|date',
+            'phone_number'              => 'required|string|max:12',
+            'occupation_id'             => 'nullable|exists:occupations,id',
+            'religion_id'               => 'nullable|exists:religions,id',
+            'education_id'              => 'nullable|exists:educations,id',
+            'marital_status'            => 'required|in:married,single,widower,widow',
+            'blood_type'                => 'required|in:A,AB,B,O',
+            'email'                     => 'nullable|string|email|unique:citizens,email',
+            'nationality'               => 'required|in:wni,wna',
+            'status'                    => 'required|in:active,moved,deceased'
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator){
+            if($this->create_new_family_card){
+                if(!$this->family_card_number){
+                    $validator->errors()->add(
+                        'family_card_number',
+                        'Nomor KK baru harus diisi',
+                    );
+                }
+            }else{
+                if(!$this->family_card_id){
+                    $validator->errors()->add('family_card_id','Kartu keluarga harus dipilih');
+                }
+            }
+        });
     }
 
     public function attributes()
@@ -67,11 +87,14 @@ class CitizenStoreRequest extends FormRequest
         return [
             'family_card_id'            => 'Kartu Keluarga harus diisi',
             'full_name.required'        => 'Nama lengkap harus diisi',
-            'nik.required'              => 'NIK harus diisi',
+            'nik.required'              => ':attribute harus diisi',
+            'unique'                    => ':attribute sudah terdaftar',
+            'digits'                    => ':attribute maksimal 16 karakter',
             'gender.required'           => 'Jenis kelamin harus diisi',
             'place_of_birth.required'   => 'Tempat lahir harus diisi',
             'date_of_birth.required'    => 'Tanggal lahir harus diisi',
-            'phone_number.required'     => 'No.Telp harus diisi',
+            'phone_number.required'     => ':attribute harus diisi',
+            'max'                       => ':attribute maksimal 12 karakter',
             'occupation_id.required'    => 'Pekerjaan harus diisi',
             'religion_id.required'      => 'Agama harus diisi',
             'education_id.required'     => 'Pendidikan harus diisi',
