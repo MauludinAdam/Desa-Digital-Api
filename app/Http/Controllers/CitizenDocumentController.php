@@ -48,6 +48,12 @@ class CitizenDocumentController extends Controller
         $data = $request->validated();
 
         try {
+
+           $file = $request->file('file');
+
+           $filename = $file->getClientOriginalName();
+           $data['file'] = $file->storeAs('citizen-documents', $filename, 'public');
+
             $citizenDocument = CitizenDocument::create($data);
 
             return ResponseHelper::jsonResponse(true, 'Dokumen penduduk berhasil ditambahkan.', new CitizenDocumentResource($citizenDocument), 201);
@@ -85,6 +91,16 @@ class CitizenDocumentController extends Controller
 
         try {
             $citizenDocument = CitizenDocument::findOrFail($id);
+
+            if($request->hasFile('file')){
+
+                $file = $request->file('file');
+    
+                $filename = $file->getClientOriginalName();
+                $data['file'] = $file->storeAs('citizen-documents', $filename, 'public');
+            }else{
+                unset($data['file']);
+            }
 
             $citizenDocument->update($data);
 

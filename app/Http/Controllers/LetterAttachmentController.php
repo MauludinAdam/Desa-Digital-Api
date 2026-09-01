@@ -41,6 +41,12 @@ class LetterAttachmentController extends Controller
         $data = $request->validated();
 
         try {
+
+            $file = $request->file('file');
+
+            $fileName = $file->getClientOriginalName();
+            $data['file'] = $file->storeAs('letter-attachmans', $fileName, 'public');
+
             $letterAttachment = LetterAttachment::create($data);
 
             return ResponseHelper::jsonResponse(true, 'Data lampiran surat berhasil ditambahkan.', new LetterAttachmentResource($letterAttachment), 201);

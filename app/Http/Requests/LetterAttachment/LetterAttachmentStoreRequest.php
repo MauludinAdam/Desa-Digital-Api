@@ -24,7 +24,7 @@ class LetterAttachmentStoreRequest extends FormRequest
     {
         return [
             'letter_id'            => 'required|string|max:200',
-            'file'                  => 'required|string|max:200',
+            'file'                  => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'description'           => 'required|string|max:500',
         ];
     }
@@ -43,6 +43,9 @@ class LetterAttachmentStoreRequest extends FormRequest
         return [
             'letter_id.required'       => ':attribute harus diisi',
             'file.required'             => ':attribute harus diisi',
+            'file.file'                 => ':attribue harus berupa file',
+            'mimes'                     => ':attribute harus berupa PDF, JPG, PNG, JPEG',
+            'max'                       => ':attribute maksimal 5MB',
             'description.required'      => ':attribute harus diisi',        
         ];
     }

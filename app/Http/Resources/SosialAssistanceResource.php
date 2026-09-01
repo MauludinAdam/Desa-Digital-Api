@@ -15,13 +15,14 @@ class SosialAssistanceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'                => $this->id,
-            'name'              => $this->name,
-            'category_id'       => $this->category_id,
-            'amount'            => $this->amount,
-            'provider'          => $this->provider,
-            'description'       => $this->description,
-            'is_available'      => $this->is_available,
+            'id'                            => $this->id,
+            'name'                          => $this->name,
+            'category_id'                   => $this->category_id,
+            'sosial_assistance_categories' => $this->whenLoaded('category'),
+            'amount'                        => $this->amount,
+            'provider'                      => $this->provider,
+            'description'                   => $this->description,
+            'is_available'                  => $this->is_available,
         ];
     }
 }

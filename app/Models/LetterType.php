@@ -13,6 +13,8 @@ class LetterType extends Model
         'name',
         'code',
         'description',
+        'template',
+        'content',
     ];
 
     public function scopeSearch($query, $search)

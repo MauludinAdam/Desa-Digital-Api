@@ -3,18 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\UUID;
 
 class LetterAttachment extends Model
 {
-    use SoftDeletes, UUID;
+    use UUID;
 
     protected $fillable = [
         'letter_id',
         'file',
         'description',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereHas('letter', function($query) use ($search){
+            $query->where('name','Like', "%{$search}%");
+        });
+    }
 
     public function letter()
     {

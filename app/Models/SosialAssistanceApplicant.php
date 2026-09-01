@@ -22,6 +22,7 @@ class SosialAssistanceApplicant extends Model
         'account_number',
         'rejection_reason',
         'status',
+        'transfer_proof',
     ];
 
     public function scopeSearch($query, $search)

@@ -13,4 +13,9 @@ class Education extends Model
     protected $table = 'educations';
 
     protected $fillable = ['name'];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'Like', "%{$search}%");
+    }
 }

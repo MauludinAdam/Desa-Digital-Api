@@ -16,14 +16,20 @@ class SosialAssistanceApplicantResource extends JsonResource
     {
         return [
             'id'                        => $this->id,
+
             'sosial_assistance_id'      => $this->sosial_assistance_id,
+            'sosialAssistance'         => $this->whenLoaded('sosialAssistance'),
+
             'citizen_id'                => $this->citizen_id,
+            'citizen'                   => $this->whenLoaded('citizen'),
+
             'bank'                      => $this->bank,
             'amount'                    => $this->amount,
             'reason'                    => $this->reason,
             'rejection_reason'          => $this->rejection_reason,
             'account_number'            => $this->account_number,
-            'status'                    => 'pending',
+            'status'                    => $this->status,
+            'transfer_proof'            => $this->transfer_proof ? asset('storage/'. $this->transfer_proof) : null,
         ];
     }
 }

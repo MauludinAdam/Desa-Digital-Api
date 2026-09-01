@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Citizen;
 use App\Models\FamilyMember;
+use App\Models\Letter;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,5 +52,10 @@ class FamilyCard extends Model
     public function familyMembers()
     {
         return $this->hasMany(FamilyMember::class, 'family_card_id', 'id');
+    }
+
+    public function letters()
+    {
+        return $this->hasMany(Letter::class, 'letter_id','id');
     }
 }

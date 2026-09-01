@@ -4,8 +4,6 @@ use App\Http\Controllers\AnaliticsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\CitizenDocumentController;
-
-use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\FamilyCardController;
@@ -15,6 +13,7 @@ use App\Http\Controllers\LetterController;
 use App\Http\Controllers\LetterTypeController;
 use App\Http\Controllers\OccupationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileVillageController;
 use App\Http\Controllers\ReligionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SosialAssistanceApplicantController;
@@ -25,14 +24,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-
-
-
 Route::middleware('auth:sanctum')->group(function (){
     Route::prefix('reports')->group(function(){
         Route::get('/citizen', [ReportController::class, 'citizen']);
         Route::get('/family-card', [ReportController::class, 'familyCard']);
-        Route::get('/complaint', [ReportController::class, 'complaint']);
         Route::get('/sosial-assistance-applicant', [ReportController::class, 'sosialAssistanceApplicant']);
     });
 
@@ -57,6 +52,8 @@ Route::middleware('auth:sanctum')->group(function (){
     ->middlewareFor(['index','show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
 
+    Route::patch('/letter/{id}/approved',[LetterController::class, 'approved']);
+    Route::patch('/letter/{id}/rejected', [LetterController::class, 'rejected']);
     Route::apiResource('/letter', LetterController::class)
     ->middlewareFor(['index','show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
@@ -65,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function (){
     ->middlewareFor(['index','show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
 
+   
     Route::apiResource('/letter-attachment', LetterAttachmentController::class)
     ->middlewareFor(['index','show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
@@ -81,31 +79,32 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('/sosial-assistance-category', SosialAssistanceCategoryController::class)
     ->middleware('role:admin');
 
-    Route::apiResource('/sosial-assistance', SOsialAssistanceController::class)
-    ->middleware('role:admin');
+    Route::apiResource('/sosial-assistance', SosialAssistanceController::class)
+    ->middleware('role:admin|headman');
 
     Route::apiResource('/sosial-assistance-applicant', SosialAssistanceApplicantController::class)
     ->middlewareFor(['index','show'], 'role:admin|headman')
     ->middlewareFor(['store','update','destroy'], 'role:admin');
-    Route::patch('/sosial-assistance-applicant/{id}/approve', [SosialAssistanceApplicantController::class, 'approve'])
+    
+    Route::put('sosial-assistance-applicant/{id}/upload', [SosialAssistanceApplicantController::class, 'uploadTransferProof'])
     ->middleware('role:headman');
-    Route::patch('/sosial-assistance-applicant/{id}/reject', [SosialAssistanceApplicantController::class, 'reject'])
+    Route::patch('/sosial-assistance-applicant/{id}/approved', [SosialAssistanceApplicantController::class, 'approved'])
+    ->middleware('role:headman');
+    Route::patch('/sosial-assistance-applicant/{id}/rejected', [SosialAssistanceApplicantController::class, 'rejected'])
     ->middleware('role:headman');
 
-    Route::apiResource('/complaint', ComplaintController::class)
-    ->middleware('role:admin');
-
-    Route::get('profile', [ProfileController::class, 'index'])
+    Route::get('profile', [ProfileVillageController::class, 'show'])
     ->middleware('role:admin|headman');
 
-    Route::post('profile', [ProfileController::class, 'store'])
-    ->middleware('role:admin');
-
-    Route::put('profile', [ProfileController::class, 'update'])
+    Route::post('profile', [ProfileVillageController::class, 'update'])
     ->middleware('role:admin');
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset');
+
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth:sanctum')->get('/me', [AuthController::class, 'me'])->name('me');
+Route::middleware('auth:sanctum')->put('/me', [AuthController::class, 'update'])->name('me.update');

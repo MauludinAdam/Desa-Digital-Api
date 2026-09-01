@@ -22,6 +22,13 @@ class Complaint extends Model
         'responded_at',
     ];
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereHas('citizen', function($query) use ($search){
+            $query->where('full_name', 'Like', "%{$search}%");
+        });
+    }
+
     public function citizen()
     {
         return $this->belongsTo(Citizen::class, 'citizen_id');

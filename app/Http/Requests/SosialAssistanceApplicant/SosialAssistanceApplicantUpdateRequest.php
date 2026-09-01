@@ -29,7 +29,6 @@ class SosialAssistanceApplicantUpdateRequest extends FormRequest
             'amount'                    => 'required|string|max:200',
             'reason'                    => 'required|string|max:200',
             'account_number'            => 'required|string|max:200',
-            'rejection_reason'          => 'required|string|max:500',
         ];
     }
 
@@ -42,7 +41,6 @@ class SosialAssistanceApplicantUpdateRequest extends FormRequest
             'amount'                    => 'Jumlah',
             'reason'                    => 'Alasan',
             'account_number'            => 'Nomor rekening',
-            'rejection_reason'          => 'Alasan menolak',
         ];
     }
 
@@ -54,8 +52,7 @@ class SosialAssistanceApplicantUpdateRequest extends FormRequest
             'bank'                  => ':attribute harus diisi',
             'amount'                => ':attribute harus diisi',
             'reason'                => ':attribute harus diisi',
-            'account_number'        => ':attribute harus diisi',
-            'rejection_reason'      => ':attribute harus diisi',        
+            'account_number'        => ':attribute harus diisi',       
         ];
     }
 }

@@ -4,18 +4,24 @@ namespace App\Models;
 
 use App\Models\Citizen;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\UUID;
 
 class CitizenDocument extends Model
 {
-    use SoftDeletes, UUID;
+    use UUID;
     
     protected $fillable = [
         'citizen_id',
         'document_type',
         'file'
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereHas('citizen', function($query) use ($search){
+            $query->where('full_name', 'Like', "%{$search}%");
+        });
+    }
 
     public function citizen()
     {

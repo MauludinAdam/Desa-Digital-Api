@@ -53,6 +53,7 @@ class LetterStoreRequest extends FormRequest
         return [
             'citizen_id'        => ':attribute harus diisi',
             'letter_type_id'    => ':attribute harus diisi',
+            'unique'            => ':attribute sudah terdaftar',
             'purpose'           => ':attribute harus diisi',
             'status'            => ':attribute harus diisi',
             'rejection_reason'  => ':attribute harus diisi',

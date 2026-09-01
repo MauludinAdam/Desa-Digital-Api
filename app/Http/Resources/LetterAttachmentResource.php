@@ -17,7 +17,7 @@ class LetterAttachmentResource extends JsonResource
         return [
             'id'            => $this->id,
             'letter_id'     => $this->letter_id,
-            'file'          => $this->file,
+            'file'          => $this->file ? asset('storage/' . $this->file) : null,
             'description'   => $this->description,
         ];
     }

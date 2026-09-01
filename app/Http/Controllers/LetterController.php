@@ -166,4 +166,39 @@ class LetterController extends Controller
             return ResponseHelper::jsonResponse(false, $e->getMessaget(), null, 500);
         }
     }
+
+    public function approved(string $id)
+    {
+       try {
+         $letter = Letter::findOrFail($id);
+
+        $letter->update([
+            'status'    => 'approved',
+            'approved_by'   => auth()->id(),
+            'approved_at'   => now(),
+        ]);
+
+        return ResponseHelper::jsonResponse(true, 'Surat berhasil di setujuin', null, 200);
+       } catch (\Throwable $e) {
+        return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+       }
+    }
+
+    public function rejected(Request $request, $id)
+    {
+        try {
+            $letter = Letter::findOrFail($id);
+
+            $letter->update([
+                'status' => 'rejected',
+                'rejection_reason' => $request->rejection_reason,
+                'approved_by'   => auth()->id(),
+                'approved_at'   => now(),
+            ]);
+
+            return ResponseHelper::jsonResponse(true, 'Sura berhasil ditolak', null, 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
 }

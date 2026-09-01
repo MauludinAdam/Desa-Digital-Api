@@ -15,10 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('thumbnail');
             $table->string('name');
+            $table->string('district');
+            $table->string('regency');
             $table->longText('about');
             $table->string('headman');
             $table->integer('people');
-            $table->decimal('agricultural_area');
             $table->decimal('total_area');
             $table->timestamps();
             $table->softDeletes();

@@ -28,7 +28,7 @@ class SosialAssistanceApplicantStoreRequest extends FormRequest
             'bank'                      => 'required|string|max:200',
             'amount'                    => 'required|string|max:200',
             'reason'                    => 'required|string|max:200',
-            'rejection_reason'          => 'required|string|max:500',
+            'rejection_reason'          => 'nullable|string|max:500',
             'account_number'            => 'required|string|max:200',
         ];
     }

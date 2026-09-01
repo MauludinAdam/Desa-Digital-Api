@@ -25,7 +25,7 @@ class CitizenDocumentUpdateRequest extends FormRequest
         return [
             'citizen_id'        => 'required|string|exists:citizens,id',
             'document_type'     => 'required|string|max:200',
-            'file'              => 'required|string|max:200',
+            'file'              => 'mimes:pdf,jpg,png,jpeg|max:5120',
         ];
     }
 
@@ -44,6 +44,8 @@ class CitizenDocumentUpdateRequest extends FormRequest
             'citizen_id'        => ':attribute harus diisi',
             'document_type'     => ':attribute harus diisi',
             'file'              => ':attribute harus diisi',
+            'mimes'             => ':attribute harus berupa PDF,JPG.PNG,JPEG',
+            'max'               => ':attribute maksimal 5MB',
         ];
     }
 }

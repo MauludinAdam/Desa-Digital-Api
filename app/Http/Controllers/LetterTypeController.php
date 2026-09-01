@@ -22,14 +22,14 @@ class LetterTypeController extends Controller
             'row_per_page'  => 'nullable|integer|min:5|max:100',
         ]);
 
-        $rowPerPgae = $request->input('row_per_page');
+        $rowPerPage = $request->input('row_per_page', 10);
         $search     = $request->input('search');
 
         $letterType = LetterType::query()->when($search, function($query) use ($search){
             $query->search($search);
-        })->orderBy('created_at','desc')->paginate($rowPerPgae);
+        })->orderBy('created_at','desc')->paginate($rowPerPage);
 
-        return ResponseHelper::jsonResponse(true, 'Data jensi surat berhasil diambil', PaginateResource::make($letterType, LettertypeResource::class), 200);
+        return ResponseHelper::jsonResponse(true, 'Data jensi surat berhasil diambil', PaginateResource::make($letterType, LetterTypeResource::class), 200);
     }
 
     /**

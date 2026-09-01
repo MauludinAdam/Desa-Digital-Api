@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Models\Citizen;
+use App\Models\FamilyCard;
+use App\Models\LetterType;
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\UUID;
 
 class Letter extends Model
 {
@@ -26,8 +28,7 @@ class Letter extends Model
   {
     return $query->whereHas('citizen', function($query) use ($search) {
         $query->where('full_name','Like',"%{$search}%")
-        ->orWhere('nik','Like',"{$search}")
-        ->orWhere('email','Like',"%{$search}");
+        ->orWhere('nik','Like',"{$search}");
     });
   }
 

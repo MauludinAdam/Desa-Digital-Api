@@ -17,8 +17,9 @@ class CitizenDocumentResource extends JsonResource
         return [
             'id'            => $this->id,
             'citizen_id'    => $this->citizen_id,
+            'citizen'       => $this->whenLoaded('citizen'),
             'document_type' => $this->document_type,
-            'file'          => $this->file,
+            'file'          => $this->file ? asset('storage/'. $this->file) : null,
         ];
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Resources\PaginateResource;
 use App\Http\Resources\SosialAssistanceApplicantResource;
 use App\Http\Requests\SosialAssistanceApplicant\SosialAssistanceApplicantStoreRequest;
 use App\Http\Requests\SosialAssistanceApplicant\SosialAssistanceApplicantUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 class SosialAssistanceApplicantController extends Controller
 {
     /**
@@ -29,10 +30,6 @@ class SosialAssistanceApplicantController extends Controller
         ])->when($search, function($query) use ($search){
             $query->search($search);
         })->orderBy('created_at','desc')->paginate($rowPerPage);
-
-        if($sosialAssistanceApplicant->isEmpty()){
-            return ResponseHelper::jsonResponse(false, 'Data penerima bantuan kosong.', null, 404);
-        }
 
         return ResponseHelper::jsonResponse(true, 'Data penerima bantau berhasil diambil', PaginateResource::make($sosialAssistanceApplicant, SosialAssistanceApplicantResource::class), 200);
     }
@@ -59,7 +56,10 @@ class SosialAssistanceApplicantController extends Controller
     public function show(string $id)
     {
         try {
-            $sosialAssistanceApplicant = SosialAssistanceApplicant::find($id);
+            $sosialAssistanceApplicant = SosialAssistanceApplicant::with([
+                'citizen',
+                'sosialAssistance'
+                ])->find($id);
 
             if(!$sosialAssistanceApplicant){
                 return ResponseHelper::jsonResponse(false, 'Data penerima bantuan tidak ditemukan', null, 404);
@@ -104,4 +104,68 @@ class SosialAssistanceApplicantController extends Controller
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
+
+    public function approved(string $id)
+    {
+        try {
+            $sosialAssistanceApplicant = SosialAssistanceApplicant::findOrFail($id);
+            $sosialAssistanceApplicant->update([
+                'status'  => 'approved',
+            ]);
+
+            return ResponseHelper::jsonResponse(true, 'Penerima bantuan berhasil disetujuin', null, 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function rejected(Request $request, $id)
+    {
+        try {
+            $sosialAssistanceApplicant = SosialAssistanceApplicant::findOrFail($id);
+
+            $sosialAssistanceApplicant->update([
+                'status' => 'rejected',
+                'rejection_reason'  => 
+                $request->rejection_reason,
+                'payout_status' => 'failed'
+            ]);
+
+            return ResponseHelper::jsonResponse(true, 'Penerima bantuan berhasil di tolak', null, 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function uploadTransferProof(Request $request, $id)
+    {
+        $request->validate([
+            'transfer_proof'    => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ],[
+            'transfer_proof.required'   => 'Bukit penyaluran harus diisi',
+            'transfer_proof.image'      => 'Bukti penyaluran harus berupa gambar',
+            'transfer_proof.mimes'      => 'Bukti penyaluran harus berupa jpg png jpeg webp',
+            'transfer_proof.max'        => 'Bukti penyaluran maksiman 2MB',
+        ]);
+
+        try {
+            $recipient = SosialAssistanceApplicant::findOrFail($id);
+
+            // Hapus File lama jika
+            if($recipient->transfer_proof){
+                Storage::disk('public')->delete($recipient->transfer_proof);
+            };
+
+            // Upload file baru
+            $filePath = $request->file('transfer_proof')
+            ->store('transfer_proofs','public');
+
+            $recipient->update(['transfer_proof' => $filePath]);
+
+            return ResponseHelper::jsonResponse(true, 'Bukti penyaluran dana berhasil disalurkan', new SosialAssistanceApplicantResource($recipient), 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
 }

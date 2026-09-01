@@ -29,9 +29,6 @@ class SosialAssistanceController extends Controller
             $query->search($search);
         })->orderBy('created_at','desc')->paginate($rowPerPage);
 
-        if($sosialAssistance->isEmpty()){
-            return ResponseHelper::jsonResponse(false, 'Data bantuan sosial belum ada.', null, 404);
-        }
 
         return ResponseHelper::jsonResponse(true, 'Data sosial assisten berhasil diambil', PaginateResource::make($sosialAssistance, SosialAssistanceResource::class), 200);
     }

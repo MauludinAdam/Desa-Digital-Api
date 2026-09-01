@@ -24,9 +24,11 @@ class SosialAssistanceCategoryController extends Controller
         $rowPerPage = $request->input('row_per_page');
         $search = $request->input('search');
 
-        $sosialAssistanceCategory = SosialAssistanceCategory::query($search, function($query) use ($search){
+        $sosialAssistanceCategory = SosialAssistanceCategory::query()
+        ->when($search, function($query) use ($search){
             $query->search($search);
-        })->orderBy('created_at','desc')->paginate($rowPerPage);
+        })->orderBy('created_at')
+            ->paginate($rowPerPage);
 
         if($sosialAssistanceCategory->isEmpty()){
             return ResponseHelper::jsonResponse(false, 'Data kategori bantuan tidak ditemukan.', null, 404);
@@ -94,7 +96,7 @@ class SosialAssistanceCategoryController extends Controller
     public function destroy(string $id)
     {
         try {
-            $sosialAssistanceCategory = SosialAssistanceCategory::find($id);
+            $sosialAssistanceCategory = SosialAssistanceCategory::findOrFail($id);
 
             $sosialAssistanceCategory->delete();
 

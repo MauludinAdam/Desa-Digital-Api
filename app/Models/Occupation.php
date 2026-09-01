@@ -14,4 +14,9 @@ class Occupation extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'Like', "%{$search}%");
+    }
 }
