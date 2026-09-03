@@ -6,6 +6,7 @@ use App\Models\Bumdes;
 use App\Models\BumdesUnit;
 use App\Traits;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UUID;
 
 class BumdesProduct extends Model
 {

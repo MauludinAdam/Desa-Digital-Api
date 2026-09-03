@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits;
+use App\Traits\UUID;
 
 class BumdesManajer extends Model
 {
@@ -16,10 +16,15 @@ class BumdesManajer extends Model
         'phone',
         'address',
         'photo',
-        'start_yera',
-        'end_year',
+        'start_date',
+        'end_date',
         'status',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', "%{$search}%");
+    }
 
     public function bumdes()
     {

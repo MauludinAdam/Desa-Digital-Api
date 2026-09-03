@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Bumdes;
 use App\Models\BumdesProduct;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UUID;
 
 class BumdesUnit extends Model
 {

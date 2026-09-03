@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\AnaliticsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BumdesController;
+use App\Http\Controllers\BumdesManajerController;
+use App\Http\Controllers\BumdesProductController;
+use App\Http\Controllers\BumdesUnitsController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\CitizenDocumentController;
 use App\Http\Controllers\DashboardController;
@@ -22,6 +26,10 @@ use App\Http\Controllers\SosialAssistanceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
+
+
 
 
 Route::middleware('auth:sanctum')->group(function (){
@@ -92,6 +100,23 @@ Route::middleware('auth:sanctum')->group(function (){
     ->middleware('role:headman');
     Route::patch('/sosial-assistance-applicant/{id}/rejected', [SosialAssistanceApplicantController::class, 'rejected'])
     ->middleware('role:headman');
+
+    Route::get('/bumdes', [BumdesController::class, 'show'])
+    ->middleware('role:admin|headman');
+    Route::post('/bumdes', [BumdesController::class, 'update'])
+    ->middleware('role:admin');
+
+    Route::apiResource('/bumdes-manajer', BumdesManajerController::class)
+    ->middlewareFor(['index', 'show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/bumdes-unit', BumdesUnitsController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
+
+    Route::apiResource('/bumdes-product', BumdesProductController::class)
+    ->middlewareFor(['index','show'], 'role:admin|headman')
+    ->middlewareFor(['store','update','destroy'], 'role:admin');
 
     Route::get('profile', [ProfileVillageController::class, 'show'])
     ->middleware('role:admin|headman');

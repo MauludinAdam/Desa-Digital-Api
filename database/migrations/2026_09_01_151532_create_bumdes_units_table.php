@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('business_type')->nullable();
             $table->text('description')->nullable();
-            $table->year('established_year')->nullable();
+            $table->date('established_year')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
         });

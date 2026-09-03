@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->string('photo')->nullable();
-            $table->year('start_year')->nullable();
-            $table->year('end_year')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->enum('status', ['active','inactive']);
             $table->timestamps();
         });

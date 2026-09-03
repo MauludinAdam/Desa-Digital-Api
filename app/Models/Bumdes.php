@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\BumdesManajer;
 use App\Models\BumdesProduct;
 use App\Models\BumdesUnit;
-use App\Traits;
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
 class Bumdes extends Model
@@ -15,7 +15,7 @@ class Bumdes extends Model
     protected $fillable = [
         'name',
         'legal_number',
-        'established_yera',
+        'established_year',
         'address',
         'description',
         'logo',
