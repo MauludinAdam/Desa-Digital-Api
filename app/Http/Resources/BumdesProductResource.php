@@ -19,9 +19,10 @@ class BumdesProductResource extends JsonResource
             'bumdes_unit_id'    => $this->bumdes_unit_id,
             'bumdesUnit'        => $this->whenLoaded('bumdesUnit'),
             'name'              => $this->name,
+            'barcode'           => $this->barcode,
             'price'             => $this->price,
-            'photo'             => $this->photo ? asset('storage/', $this->photo) : null,
-            'type'              => $this->type,
+            'unit'              => $this->unit,
+            'stock'             => $this->stock,
             'status'            => $this->status,
         ];
     }

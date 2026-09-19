@@ -14,6 +14,7 @@ class Bumdes extends Model
 
     protected $fillable = [
         'name',
+        'title',
         'legal_number',
         'established_year',
         'address',
@@ -21,9 +22,9 @@ class Bumdes extends Model
         'logo',
     ];
 
-    public function bumdesUnits()
+    public function scopeSearch($query, $search)
     {
-        return $this->hasMany(BumdesUnit::class);
+        return $query->where('name', 'like', "%{$search}%");
     }
 
     public function bumdesManajers()

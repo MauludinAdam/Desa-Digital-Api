@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('religions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name')->unique();
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('bumdes_products', function (Blueprint $table) {
+            $table->string('barcode')->unique()->after('name');
         });
     }
 
@@ -24,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('religions');
+        Schema::table('bumdes_products', function (Blueprint $table) {
+            $table->dropUnique(['barcode']);
+            $table->dropColumn('barcode');
+        });
     }
 };

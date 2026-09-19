@@ -12,6 +12,32 @@ use App\Http\Resources\PaginateResource;
 
 class BumdesProductController extends Controller
 {
+    private function generateBarcodeNumber()
+    {
+        $date = now()->format('Ymd');
+
+        $lastProduct = BumdesProduct::whereDate('created_at', now()->toDateString())
+        ->whereNotNull('barcode')
+        ->orderBy('created_at', 'desc')
+        ->first();
+
+        if($lastProduct){
+            $lastNumber = (int) substr($lastProduct->barcode, -4);
+            $number = $lastNumber + 1;
+        }else{
+            $number = 1;
+        }
+
+        return $date . str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function generateBarcode()
+    {
+        $barcode = $this->generateBarcodeNumber();
+
+        return ResponseHelper::jsonResponse(true,'Barcode berhasil ditampilkan', ['barcode' => $barcode], 200);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -41,14 +67,6 @@ class BumdesProductController extends Controller
         try {
             $data = $request->validated();
 
-            if($request->hasFile('photo')){
-                $file = $request->file('photo');
-
-                $fileName = $file->getClientOriginalName();
-                $data['photo'] = $file->storeAs('bumdes-products', $fileName, 'public');
-            }else{
-                unset($data['photo']);
-            }
 
             $bumdesProduct = BumdesProduct::create($data);
 
@@ -58,6 +76,18 @@ class BumdesProductController extends Controller
         }
     }
 
+    public function findByBarcode($barcode)
+    {
+        $product = BumdesProduct::where('barcode', $barcode)
+            ->where('status','active')
+            ->first();
+
+        if(!$product){
+            return ResponseHelper::jsonResponse(false, 'Product dengan barcode tersebut tidak ditemukan', null, 404);
+        }
+
+        return ResponseHelper::jsonResponse(true, 'Product berhasil ditemukan', $product, 200);
+    }
     /**
      * Display the specified resource.
      */

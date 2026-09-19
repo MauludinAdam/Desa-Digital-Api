@@ -31,7 +31,6 @@ class CitizenController extends Controller
         $citizens = Citizen::with([
         'familyCard',
         'occupation',
-        'religion',
         'education'
         ]) 
         ->when($search, function ($query) use ($search){
@@ -95,7 +94,6 @@ class CitizenController extends Controller
             $citizen = Citizen::with([
                 'familyCard',
                 'occupation',
-                'religion',
                 'education',
                 'citizenDocuments',
                 'letters',

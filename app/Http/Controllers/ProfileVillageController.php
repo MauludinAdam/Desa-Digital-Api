@@ -7,6 +7,7 @@ use App\Models\ProfileVillage;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\ProfileVillageResource;
 use App\Http\Requests\ProfileVillageUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileVillageController extends Controller
 {
@@ -46,18 +47,26 @@ class ProfileVillageController extends Controller
     {
         try {
             $data = $request->validated();
+            
+            $profileVillage = ProfileVillage::firstOrFail();
 
             if($request->hasFile('thumbnail')){
-                $file = $request->file('thumbnail');
+                
+            // Hapus Gambar Lama
+            if($profileVillage->thumbnail && Storage::disk('public')->exists($profileVillage->thumbnail)){
+                Storage::disk('public')->delete($profileVillage->thumbnail);
+            }
 
-                $fileName = $file->getClientOriginalName();
-                $data['thumbnail'] = $file->storeAs('profile-village', $fileName, 'public');
+            // Simpan Gambar Baru
+            $file = $request->file('thumbnail');
+            $fileName = $file->getClientOriginalName();
+
+            $data['thumbnail'] = $file->storeAs('profile-village', $fileName, 'public');
             }else{
-                unset($data['thumbnial']);
+                unset($data['thumbnail']);
             }
            
 
-            $profileVillage = ProfileVillage::first();
 
             $profileVillage->update($data);
 

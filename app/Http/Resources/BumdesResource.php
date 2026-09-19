@@ -17,11 +17,12 @@ class BumdesResource extends JsonResource
         return [
             'id'                => $this->id,
             'name'              => $this->name,
+            'title'              => $this->title,
             'legal_number'      => $this->legal_number,
             'established_year'  => $this->established_year,
             'address'           => $this->address,
             'description'       => $this->description,
-            'logo'              => $this->logo,
+            'logo'              => $this->logo ? asset('storage/'. $this->logo) : null,
         ];
     }
 }

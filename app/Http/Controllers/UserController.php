@@ -3,54 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PaginateResource;
-use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\users\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository) {
-        $this->userRepository = $userRepository;
-    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        try {
-            $users = $this->userRepository->getAll(
-                $request->search,
-                $request->limit,
-                true
-            );
-
-            return ResponseHelper::jsonResponse(true, 'Data User Berhasil Diambil', UserResource::collection($users), 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
-        }
-    }
-    public function getAllPaginated(Request $request)
-    {
-        $request = $request->validate([
-            'search'    =>  'nullable|string',
-            'row_per_page'     => 'required|integer',
+        $request->validate([
+            'row_per_page'  => 'nullable|integer',
         ]);
 
-        try {
-            $users = $this->userRepository->getAllPaginated(
-                $request['search'] ?? null,
-                $request['row_per_page']
-            );
+        $rowPerPage = $request->input('row_per_page', 10);
+        $search = $request->input('search');
 
-            return ResponseHelper::jsonResponse(true, 'Data User Berhasil Diambil', PaginateResource::make($users, UserResource::class), 200);
-        } catch (\Exception $e) {
-            return ResponseHelper::jsonResponse(false, $e->geMessage(), null, 500);
-        }
+        $user = User::with(['role'])
+        ->when($search, function ($query) use ($search){
+            $query->Search($search);
+        })->orderBy('created_at', 'desc')->paginate($rowPerPage);
+
+        return ResponseHelper::jsonResponse(true, 'Data user manajemen berhasil diambi', PaginateResource::make($user, UserResource::class), 200);
     }
 
     /**
@@ -58,13 +38,16 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $request = $request->validated();
+        $data = $request->validated();
 
         try {
-            $user = $this->userRepository->create($request);
+
+            $data['password'] = Hash::make($data['password']);
+
+            $user = User::create($data);
 
             return ResponseHelper::jsonResponse(true, 'Data User berhasil ditambahkan', new UserResource($user), 201);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
@@ -75,14 +58,14 @@ class UserController extends Controller
     public function show(string $id)
     {
         try {
-            $user = $this->userRepository->getById($id);
+            $user = User::findOrFail($id);
 
             if(!$user){
                 return ResponseHelper::jsonResponse(false, 'Data User Tidak Ditemukan', 404);
             }
 
             return ResponseHelper::jsonResponse(true, 'Detail User Berhasil Diambil', new UserResource($user), 200);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }
@@ -92,21 +75,19 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, string $id)
     {
-        $request = $request->validated();
+        $data = $request->validated();
 
         try {
-            $user = $this->userRepository->getByid(
-                $id,
-            );
+            $user = User::find($id);
 
             if(empty($user)){
                 return ResponseHelper::jsonResponse(false, 'Data User Tidak Ditemukan', null, 404);
             }
 
-            $user = $this->userRepository->update($id, $request);
+            $user = $this->update($id, $data);
 
             return ResponseHelper::jsonResponse(true, 'Data User Berhasil Diupdate', new UserResource($user), 200);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500); 
         }
     }
@@ -117,16 +98,41 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         try {
-            $user = $this->userRepository->getById($id);
+            $user = user::find($id);
 
             if(!$user){
                 return ResponseHelper::jsonResponse(false, 'Data User Tidak Ditemukan', null, 404);
             }
 
-            $user = $this->userRepository->delete($id);
+            $user->delete();
 
             return ResponseHelper::jsonResponse(true, 'Data User Berhasil Dihapus', new UserResource($user), 200);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function status(Request $request, $id)
+    {
+        
+        $request->validate([
+            'status' => 'required|in:Active,Inactive',
+        ]);
+
+        try {
+            $user = User::findOrFail($id);
+
+            // Cek role user mau diubah
+            if($user->id === $request->user()->id){
+                return ResponseHelper::jsonResponse(false, 'Anda tidak dapat mengubah status akun sendiri', null, 403);
+            }
+
+            $user->update([
+                'status' => $request->status,
+            ]);
+
+            return ResponseHelper::jsonResponse(true, 'Status useer berhasil diperbarui', new UserResource($user->load('role')), 200);
+        } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }
     }

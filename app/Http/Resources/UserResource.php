@@ -14,11 +14,24 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $role = $this->roles->first();
         return [
             'id'        => $this->id,
+            'role_id'   => $this->role_id,
             'name'      => $this->name,
             'email'     => $this->email,
-            'role'      => $this->roles->first() ? ['name' => $this->roles->first()->name,] : null,
+
+            'role'     => $this->role ? [
+                'id'   => $this->role->id,
+                'name' => $this->role->name,
+            ]
+            : null,
+
+            'permissions' => $this->getAllPermissions()
+            ->pluck('name')
+            ->values(),
+
+            'status'    => $this->status,
         ];
     }
 }

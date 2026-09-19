@@ -23,9 +23,9 @@ class CitizenStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'family_card_id'            => 'nullable|exists:family_cards,id',
-            'family_card_number'        => 'nullable|digits:16|unique:family_cards,family_card_number',
-            'create_new_family_card'    => 'required|boolean',
+            // 'family_card_id'            => 'nullable|exists:family_cards,id',
+            // 'family_card_number'        => 'nullable|digits:16|unique:family_cards,family_card_number',
+            // 'create_new_family_card'    => 'required|boolean',
             'full_name'                 => 'required|string|max:255',
             'nik'                       => 'required|digits:16|unique:citizens,nik',
             'gender'                    => 'required|in:male,female',
@@ -33,7 +33,7 @@ class CitizenStoreRequest extends FormRequest
             'date_of_birth'             => 'required|date',
             'phone_number'              => 'required|string|max:12',
             'occupation_id'             => 'nullable|exists:occupations,id',
-            'religion_id'               => 'nullable|exists:religions,id',
+            'religion'                  => 'required|string|max:250',
             'education_id'              => 'nullable|exists:educations,id',
             'marital_status'            => 'required|in:married,single,widower,widow',
             'blood_type'                => 'required|in:A,AB,B,O',
@@ -43,23 +43,23 @@ class CitizenStoreRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator){
-            if($this->create_new_family_card){
-                if(!$this->family_card_number){
-                    $validator->errors()->add(
-                        'family_card_number',
-                        'Nomor KK baru harus diisi',
-                    );
-                }
-            }else{
-                if(!$this->family_card_id){
-                    $validator->errors()->add('family_card_id','Kartu keluarga harus dipilih');
-                }
-            }
-        });
-    }
+    // public function withValidator($validator)
+    // {
+    //     $validator->after(function ($validator){
+    //         if($this->create_new_family_card){
+    //             if(!$this->family_card_number){
+    //                 $validator->errors()->add(
+    //                     'family_card_number',
+    //                     'Nomor KK baru harus diisi',
+    //                 );
+    //             }
+    //         }else{
+    //             if(!$this->family_card_id){
+    //                 $validator->errors()->add('family_card_id','Kartu keluarga harus dipilih');
+    //             }
+    //         }
+    //     });
+    // }
 
     public function attributes()
     {
@@ -72,7 +72,7 @@ class CitizenStoreRequest extends FormRequest
             'date_of_birth'         => 'Tanggal Lahir',
             'phone_number'          => 'No.Telp',
             'occupation_id'         => 'Pekerjaan',
-            'religion_id'           => 'Agama',
+            'religion'              => 'Agama',
             'education_id'          => 'Pendidikan',
             'marital_status'        => 'Status Perkawinan',
             'blood_type'            => 'Golongan Darah',
@@ -96,7 +96,7 @@ class CitizenStoreRequest extends FormRequest
             'phone_number.required'     => ':attribute harus diisi',
             'max'                       => ':attribute maksimal 12 karakter',
             'occupation_id.required'    => 'Pekerjaan harus diisi',
-            'religion_id.required'      => 'Agama harus diisi',
+            'religion.required'         => 'Agama harus diisi',
             'education_id.required'     => 'Pendidikan harus diisi',
             'marital_status.required'   => 'Status perkawinan harus diisi',
             'blood_type.required'       => 'Golongan darah harus diisi',

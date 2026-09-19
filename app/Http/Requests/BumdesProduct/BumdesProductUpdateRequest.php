@@ -25,9 +25,10 @@ class BumdesProductUpdateRequest extends FormRequest
         return [
             'bumdes_unit_id'        => 'required|string|max:200',
             'name'                  => 'required|string|max:200',
-            'price'                 => 'required|string|max:150',
-            'photo'                 => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'type'                  => 'required|string|max:200',
+            'barcode'               => 'required|string|max:200',
+            'price'                 => 'required|string|max:200',
+            'unit'                  => 'required|string|max:150',
+            'stock'                 => 'required|integer|min:0',
             'status'                => 'required|string|max:200',
         ];
     }
@@ -37,9 +38,10 @@ class BumdesProductUpdateRequest extends FormRequest
         return [
             'bumdes_unit_id'    => 'Unit Usaha',
             'name'              => 'Nama',
+            'barcode'           => 'Barcode',
             'price'             => 'Harga',
-            'photo'             => 'Gambar',
-            'type'              => 'Type',
+            'unit'             => 'Unit',
+            'stock'             => 'Stock',
             'status'            => 'Status',
         ];
     }
@@ -49,12 +51,10 @@ class BumdesProductUpdateRequest extends FormRequest
         return [
             'bumdes_unit_id.required' => ':attribute harus diisi',
             'name.required'           => ':attribute harus diisi',
+            'barcode.required'        => ':attribute harus diisi',
             'price.required'          => ':attribute harus diisi',
-            'photo.required'          => ':attribute harus diisi',
-            'photo.image'             => ':attribute harus berupa gambar',
-            'photo.mimes'             => ':attribute harus berupa jpg png jpeg webp',
-            'photo.max'               => ':attribute maksimal 2MB',
-            'type.required'           => ':attribute harus diisi',
+            'unit.required'          => ':attribute harus diisi',
+            'stock.required'          => ':attribute harus diisi',
             'status.required'         => ':attribute harus diisi',
         ];
     }

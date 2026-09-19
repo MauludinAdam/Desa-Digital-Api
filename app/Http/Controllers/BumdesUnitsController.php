@@ -24,10 +24,8 @@ class BumdesUnitsController extends Controller
         $rowPerPage = $request->input('row_per_page');
         $search = $request->input('search');
 
-        $bumdesUnit = BumdesUnit::with([
-            'bumdes',
-        ])->when($search, function($query) use ($search){
-
+        $bumdesUnit = BumdesUnit::query()->when($search, function($query) use ($search){
+            $query->search($search);
         })->orderBy('created_at','desc')->paginate($rowPerPage);
 
         return ResponseHelper::jsonResponse(true, 'Data unit bumdes berhasil diambil', PaginateResource::make($bumdesUnit, BumdesUnitResource::class), 200);

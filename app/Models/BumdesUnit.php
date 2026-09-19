@@ -4,15 +4,15 @@ namespace App\Models;
 
 use App\Models\Bumdes;
 use App\Models\BumdesProduct;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BumdesSales;
 use App\Traits\UUID;
+use Illuminate\Database\Eloquent\Model;
 
 class BumdesUnit extends Model
 {
     use UUID;
 
     protected $fillable = [
-        'bumdes_id',
         'name',
         'business_type',
         'description',
@@ -20,13 +20,18 @@ class BumdesUnit extends Model
         'status'
     ];
 
-    public function bumdes()
+    public function scopeSearch($query, $search)
     {
-        return $this->belongsTo(Bumdes::class);
+        return $query->where('name', 'like', "%{$search}%");
     }
 
     public function bumdesProduct()
     {
         return $this->hasMany(BumdesProduct::class);
+    }
+
+    public function bumdesSales()
+    {
+        return $this->hasMany(BumdesSales::class);
     }
 }

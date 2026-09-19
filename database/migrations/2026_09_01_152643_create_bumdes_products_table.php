@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('bumdes_products', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('bumdes_unit_id')->constrained('bumdes_units')->cascadeOnDelete();
+            $table->foreignUuid('bumdes_unit_id')->nullable()->constrained('bumdes_units')->onDelete('cascade');
             $table->string('name');
             $table->bigInteger('price')->nullable();
-            $table->string('photo')->nullable();
             $table->enum('type', ['product','service'])->default('product');
             $table->enum('status',['active','inactive'])->default('active');
             $table->timestamps();

@@ -18,7 +18,7 @@ class Citizen extends Model
 {
 use SoftDeletes, UUID;
 
-    protected $fillable = [
+    protected $fillable = [ 
         'family_card_id',
         'full_name',
         'nik',
@@ -27,7 +27,7 @@ use SoftDeletes, UUID;
         'date_of_birth',
         'phone_number',
         'occupation_id',
-        'religion_id',
+        'religion',
         'education_id',
         'marital_status',
         'blood_type',

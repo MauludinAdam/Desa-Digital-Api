@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bumdes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('title');
             $table->string('legal_number')->nullable();
             $table->year('established_year')->nullable();
             $table->text('address')->nullable();

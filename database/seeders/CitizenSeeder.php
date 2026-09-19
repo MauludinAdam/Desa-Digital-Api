@@ -25,7 +25,7 @@ class CitizenSeeder extends Seeder
                 'date_of_birth'    => fake()->date(),
                 'phone_number'     => fake()->phoneNumber(),
                 'occupation_id'    => null,
-                'religion_id'      => null,
+                'religion'          => null,
                 'education_id'     => null,
                 'family_card_id'   => null,
                 'marital_status'   => fake()->randomElement(['single','married','widower','widow']),

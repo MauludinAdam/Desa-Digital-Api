@@ -32,9 +32,11 @@ class User extends Authenticatable
     // protected $keyType = 'string';
 
     protected $fillable = [
+        'role_id',
         'name',
         'email',
         'password',
+        'status',
     ];
 
     /**
@@ -84,8 +86,11 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        
+        $this->notify(new ResetPasswordNotification($token));
+    }
 
-            $this->notify(new ResetPasswordNotification($token));
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

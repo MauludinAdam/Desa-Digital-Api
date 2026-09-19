@@ -24,11 +24,12 @@ class BumdesUpdateRequest extends FormRequest
     {
         return [
             'name'              => 'required|string|max:255',
+            'title'              => 'required|string|max:255',
             'legal_number'      => 'required|string|max:255',
             'established_year'  => 'required|string|max:255',
             'description'       => 'required|string|max:500',
             'address'           => 'required|string|max:500',
-            'logo'              => 'nullable|string|max:50',
+            'logo'              => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
 
@@ -36,6 +37,7 @@ class BumdesUpdateRequest extends FormRequest
     {
         return [
             'name'              => 'Nama',
+            'title'             => 'Title',
             'legal_number'      => 'Nomor Legalitas',
             'established_year'  => 'Tahun berdiri',
             'description'       => 'Deskripsi',
@@ -48,10 +50,14 @@ class BumdesUpdateRequest extends FormRequest
     {
         return [
             'name.required'             => ':atribute harus diisi',
+            'title.required'            => ':atribute harus diisi',
             'legal_number.required'     => ':attribute harus diisi',
             'established_year.required' => ':attribute harus diisi',
             'description.required'      => ':attribute harus diisi',
-            'address.required'          => ':attribue harus diisi',         
+            'address.required'          => ':attribue harus diisi',  
+            'logo.image'                => ':attribute harus berupa gambar',
+            'logo.mimes'                => ':attribute harus berupa JPG PNG JPEG WEBP',
+            'logo.max'                  => ':attribute maksimal 2MB'       
         ];
     }
 }

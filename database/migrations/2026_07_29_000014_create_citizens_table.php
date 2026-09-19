@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('citizens', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('family_card_id')->nullable()->constrained('family_cards')->cascadseOnDelete();
+            $table->foreignUuid('family_card_id')->nullable()->constrained('family_cards')->cascadeOnDelete();
             $table->string('full_name');
             $table->string('nik', 16)->unique();
             $table->enum('gender',['male','female']);
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('date_of_birth');
             $table->string('phone_number');
             $table->foreignUuid('occupation_id')->nullable()->constrained('occupations')->nullOnDelete();
-            $table->foreignUuid('religion_id')->nullable()->constrained('religions')->nullOnDelete();
+            $table->string('religion');
             $table->foreignUuid('education_id')->nullable()->constrained('educations')->nullOnDelete();
             $table->enum('marital_status',['single','married','widower','widow']);
             $table->enum('blood_type',['A','B','AB','O'])->nullable();

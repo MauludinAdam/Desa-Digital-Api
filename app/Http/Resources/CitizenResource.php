@@ -30,7 +30,7 @@ class CitizenResource extends JsonResource
             'family_card'             => $this->whenLoaded('familyCard'),
             'occupation'            => $this->whenLoaded('occupation'),
             'education'            => $this->whenLoaded('education'),
-            'religion'            => $this->whenLoaded('religion'),
+            'religion'            => $this->religion,
             'documents'            => $this->whenLoaded('citizenDocuments'),
             'letters'            => $this->whenLoaded('letters'),
             'created_at'        => $this->created_at,

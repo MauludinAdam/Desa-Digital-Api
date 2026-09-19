@@ -23,7 +23,6 @@ class BumdesUnitUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bumdes_id'         => 'required|string|max:150',
             'name'              => 'required|string|max:200',
             'business_type'     => 'required|string|max:200',
             'description'       => 'required|string|max:500',
@@ -35,7 +34,6 @@ class BumdesUnitUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'bumdes_id'         => 'Nama Bumdes',
             'name'              => 'Nama Bidang Usaha',
             'business_type'     => 'Type Usaha',
             'description'       => 'Deskripsi',
@@ -47,7 +45,6 @@ class BumdesUnitUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'bumdes_id'              => ':attribute harus diisi',
             'name'                   => ':attribute harus diisi',
             'business_type'          => ':attribute harus diisi',
             'description'            => ':attribute harus diisi',

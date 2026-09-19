@@ -26,6 +26,10 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
+        if($user->status !== 'Active'){
+            return ResponseHelper::jsonResponse(false, 'Akun anda sedang tidak aktif', null, 403);
+        }
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
        return ResponseHelper::jsonResponse(
@@ -50,7 +54,9 @@ class AuthController extends Controller
 
    public function me(Request $request)
    {
-        $user = $request->user();
+        // $user = $request->user();
+
+        $user = $request->user()->load('roles');
 
         return ResponseHelper::jsonResponse(true, 'Data profile user berhasil diambil', new UserResource($user), 200);
    }
@@ -61,7 +67,7 @@ class AuthController extends Controller
             $data = $request->validated();
 
 
-            $user = $request->user()->load('roles');
+            $user = $request->user()->load('role');
 
             if(empty($data['password'])){
                 unset($data['password']);
