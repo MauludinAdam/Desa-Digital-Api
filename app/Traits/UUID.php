@@ -7,10 +7,7 @@ use Illuminate\Support\Str;
 trait UUID
 {
     protected static function bootUUID()
-    {
-        // parent::bootUUID();
-     
-        
+    {   
         static::creating(function ($model) {
 
             if($model->getKey() === null){
