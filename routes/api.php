@@ -19,6 +19,7 @@ use App\Http\Controllers\LetterAttachmentController;
 use App\Http\Controllers\LetterController;
 use App\Http\Controllers\LetterTypeController;
 use App\Http\Controllers\OccupationController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileVillageController;
 use App\Http\Controllers\ReligionController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\SosialAssistanceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -158,7 +160,14 @@ Route::middleware('auth:sanctum')->group(function (){
     ->middlewareFor(['index', 'show'], 'role:Admin|Kepala Desa')
     ->middlewareFor(['store','update'], 'role:Admin');
 
-    Route::get('/role', [RoleController::class, 'index'])->name('role');
+    Route::get('/permissions', [PermissionController::class, 'index'])
+    ->middleware('role:Admin');
+    
+    Route::put('/roles/{id}/permissions', [RoleController::class, 'updatePermissions'])
+    ->middleware('role:Admin');
+
+    Route::apiResource('/roles', RoleController::class)
+    ->middleware('role:Admin');
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');

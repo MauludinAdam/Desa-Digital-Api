@@ -10,6 +10,7 @@ use App\Http\Resources\PaginateResource;
 use App\Http\Requests\users\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -45,6 +46,15 @@ class UserController extends Controller
             $data['password'] = Hash::make($data['password']);
 
             $user = User::create($data);
+
+            $role = Role::find($data['role_id']);
+
+            if(!$role){
+                return ResponseHelper::jsonResponse(false, 'Role tidak ditemukan', null, 404);
+            }
+
+            // Assign Role Spatie ke user
+            $user->assignRole($role);
 
             return ResponseHelper::jsonResponse(true, 'Data User berhasil ditambahkan', new UserResource($user), 201);
         } catch (\Throwable $e) {
@@ -125,6 +135,11 @@ class UserController extends Controller
             // Cek role user mau diubah
             if($user->id === $request->user()->id){
                 return ResponseHelper::jsonResponse(false, 'Anda tidak dapat mengubah status akun sendiri', null, 403);
+            }
+
+            // tidak boleh mengubah status kepala desa
+            if($user->hasRole('Kepala Desa')){
+                return ResponseHelper::jsonResponse(false, 'Status kepala desa tidak bisa diubah', null, 403);
             }
 
             $user->update([

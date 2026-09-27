@@ -168,11 +168,25 @@ class PermissionSeeder extends Seeder
         ],
 
         'user' => [
-            'list',
             'menu',
+            'list',
             'create',
             'edit',
             'status-update',
+        ],
+
+        'role-permission' => [
+            'menu',
+            'list',
+            'create',
+            'edit',
+            'delete',
+        ],
+
+        'profile-user' => [
+            'menu',
+            'list',
+            'update',
         ]
 
     ];
@@ -210,6 +224,7 @@ class PermissionSeeder extends Seeder
                 'profile-village-menu',
                 'user-menu',
                 'user-status-update',
+                'profile-user',
 
                 // citizen
                 'citizen-list',
@@ -280,6 +295,13 @@ class PermissionSeeder extends Seeder
                 'user-create',
                 'user-edit',
 
+                // Manajemen role dan permission
+                'role-permission-menu',
+                'role-permission-list',
+                'role-permission-create',
+                'role-permission-edit',
+                'role-permission-delete',
+
               ]);
 
             //   Role Kepala Desa
@@ -303,6 +325,7 @@ class PermissionSeeder extends Seeder
                 'letter-menu',
                 'letter-type-list',
                 'letter-type-menu',
+                'profile-user-menu',
 
                 'bumdes-profile-list',
                 'bumdes-profile-menu',
@@ -332,28 +355,32 @@ class PermissionSeeder extends Seeder
                 'bumdes-report-menu',
 
                 // Bumdes Profile
+                'bumdes-profile-menu',
                 'bumdes-profile-list',
                 'bumdes-profile-edit',
 
                 // Bumdes Unit
-                'bumdes-unit-list',
+                'bumdes-unit-menu',
                 'bumdes-unit-create',
                 'bumdes-unit-edit',
                 'bumdes-unit-delete',
 
                 // Bumdes product
+                'bumdes-product-menu',
                 'bumdes-product-list',
                 'bumdes-product-create',
                 'bumdes-product-edit',
                 'bumdes-product-delete',
 
                 // Bumdes sales
+                'bumdes-sales-menu',
                 'bumdes-sales-list',
                 'bumdes-sales-create',
                 'bumdes-sales-edit',
                 'bumdes-sales-delete',
 
                 // Bumdes sales item
+                'bumdes-sales-item-menu',
                 'bumdes-sales-item-list',
                 'bumdes-sales-item-create',
                 'bumdes-sales-item-edit',

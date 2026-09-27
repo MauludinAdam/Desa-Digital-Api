@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Helpers\ResponseHelper;
+use App\Http\Resources\RoleResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoleController extends Controller
 {
@@ -13,9 +15,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::query()->orderBy('created_at','desc')->get();
+        $role = Role::with('permissions')->orderBy('name','desc')->get();
 
-        return ResponseHelper::jsonResponse(true, 'Data role berhasil diambil', $roles, 200);
+        return ResponseHelper::jsonResponse(true, 'Data role berhasil diambil', RoleResource::collection($role), 200);
     }
 
     /**
@@ -23,7 +25,20 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'  => 'required|string|max:255|unique:roles,name',
+        ]);
+
+        try {
+            $role = Role::create([
+                'name'  => $request->name,
+                'guard_name' => 'web',
+            ]);
+
+            return ResponseHelper::jsonResponse(true, 'Role berhasil ditambahkan', $role, 201);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 
     /**
@@ -31,7 +46,18 @@ class RoleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $role = Role::with('permissions')->findOrFail($id);
+
+
+            return ResponseHelper::jsonResponse(true, 'Data role berhasil diambil', new RoleResource($role), 200);
+
+        }catch (ModelNotFoundException $e){
+            return ResponseHelper::jsonResponse(false, 'Role tidak ditemukan', null, 404);
+
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 
     /**
@@ -39,7 +65,21 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name'  => 'required|string|max:255|unique:roles,name,' . $id,
+        ]);
+
+        try {
+            $role = Role::find($id);
+
+            $role->update([
+                'name' => $request->name,
+            ]);
+
+            return ResponseHelper::jsonResponse(true, 'Role berhasil diperbarui', $role, 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 
     /**
@@ -47,6 +87,43 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $role = Role::findOrFail($id);
+
+            // Cek apakah role masih digunakan oleh user
+            if($role->users()->exists()) {
+                return ResponseHelper::jsonResponse(false, 'Role masih digunakan oleh user, maka role ini tidak bisa dihapus', null, 422);
+            }
+
+            $role->delete();
+
+            return ResponseHelper::jsonResponse(true, 'Role berhasil dihapus', null, 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function updatePermissions(Request $request, string $id)
+    {
+        try {
+            $request->validate([
+                'permissions'   => 'required|array',
+                'permissions.*' => 'exists:permissions,id',
+            ]);
+
+            $role = Role::find($id);
+
+            if(!$role){
+                return ResponseHelper::jsonResponse(false, 'Role tidak ditemukan', null, 404);
+            }
+
+            $role->syncPermissions($request->permissions);
+
+            $role->load('permissions');
+
+            return ResponseHelper::jsonResponse(true, 'Permission role berhasil diperbarui', new RoleResource($role), 200);
+        } catch (\Throwable $e) {
+            return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 }

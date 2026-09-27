@@ -13,12 +13,28 @@ use App\Http\Requests\users\UserUpdateRequest;
 use App\Http\Requests\users\ForgotPasswordRequest;
 use App\Http\Requests\users\ResetPasswordRequest;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
    public function login(LoginRequest $request)
    {
+        $email = Str::lower($request->email);
+        $key = 'login:' . $email . '|' . $request->ip();
+
+        // Cek Apakah sudah terlalu banyak percobaan
+        if(RateLimiter::tooManyAttempts($key, 3)){
+            $seconds = RateLimiter::availableIn($key);
+
+            return ResponseHelper::jsonResponse(false, "Maaf, kesalahan saat login maksimal 3 kali. Silahkan coba lagi dalam {$seconds} detik.", null, 429);
+        };
+
+
         if(!Auth::attempt($request->only('email','password'))){
+
+            RateLimiter::hit($key, 60);
+
             return response()->json([
                 'message' => 'Email atau password salah',
             ], 400);
@@ -26,9 +42,14 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
+        RateLimiter::clear($key);
+
         if($user->status !== 'Active'){
             return ResponseHelper::jsonResponse(false, 'Akun anda sedang tidak aktif', null, 403);
         }
+
+        // Load relasi role dan roles untuk userResource
+        $user->load('role', 'roles');
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -37,7 +58,7 @@ class AuthController extends Controller
         'Login Berhasil',
         [
             'token' => $token,
-            'data'  => new AuthResource($user),
+            'data'  => new UserResource($user),
             
         ], 200
        );

@@ -2,18 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role as SpatieRole;
 
-class Role extends Model
+class Role extends SpatieRole
 {
-    use UUID;
+    protected $fillable = ['name', 'guard_name'];
 
-    protected $fillable = ['name'];
-
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
 }
