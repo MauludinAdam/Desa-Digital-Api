@@ -161,7 +161,7 @@ Authorization: Bearer {token}
 
 ## Roles & Permission
 Role Utama:
-1 Admin
+1. Admin
 admin memiliki akses untuk mengelola administrasi desa seperti:
 - User
 - Penduduk
@@ -171,7 +171,7 @@ admin memiliki akses untuk mengelola administrasi desa seperti:
 - Master Data
 - Profile Desa
 
-2 Kepala Desa
+2. Kepala Desa
  Kepala desa memiliki akses untuk:
  - Melihat data administrasi
  - melihat dashboard
@@ -180,7 +180,7 @@ admin memiliki akses untuk mengelola administrasi desa seperti:
  - Melihat data BUMDes
  - Melihat dashboard BUMDes
 
-3 Operator BUMDes
+2. Operator BUMDes
 Operator BUMDes memiliki akses untuk:
 - Mengelola produk
 - Mengelola Stok
