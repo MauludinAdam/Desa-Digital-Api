@@ -109,18 +109,18 @@ Sebelum menjalankan project, pastikan environment sudah meiliki:
 Buat database Mysql terlebih dahulu.
 Contoh: CREATE DATABASE desa_digital.
 
-APP_NAME=Laravel, 
-APP_ENV=local,
-APP_KEY=,
-APP_DEBUG=true,
-APP_URL=http://localhost,
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-DB_CONNECTION=mysql,
-DB_HOST=127.0.0.1,
-DB_PORT=3306,
-DB_DATABASE=desa-digital,
-DB_USERNAME=root,
-DB_PASSWORD=,
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=desa-digital
+DB_USERNAME=root
+DB_PASSWORD=
 
 Sesuaikan Konfigurasi database dengan environment masing-masing.
 
