@@ -1,59 +1,395 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Desa Digita Api
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Restful API untuk aplikasi Desa Digital, sebuah sistem informasi desa yang digunakan untuk mengelola administrasi, data kependudukan, surat-menyurat, bantuan sosial dan operasional BUMDes.
 
-## About Laravel
+Backend API dibangun menggunakan Laravel 12 dengan autentikasi berbasis Laravel Sanctum serta manajemen role dan permission menggunakan Spatie Laravel Permission. 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features.
+## Authentication
+- Login 
+- Logout
+- Get Authenticated user
+- Token-base Authentication menggunakan laravel Sanctum
+- Role & permission authorization 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## User Manajemen
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- CRUD User
+- User Profile
+- Role manajemen
+- Permission manajemen
+- Assign role kepada user
 
-## Learning Laravel
+## Manajemen Penduduk
+- CRUD data penduduk
+- CRUD kartu keluarga
+- Relasi penduduk dengan kartu keluarga
+- Data pekerjaan
+- Data pendidikan
+- Data status perkawinan
+- Search dan pagination
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Manajemen Surat
+- Pengajuan surat
+- Pengelolaan jenis surat
+- Upload lampiran
+- Approval surat oleh kepala desa
+- Reject surat
+- Generate nomor surat
+- validasi data penduduk
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Bantuan Sosial
+- CRUD kategori bantuan sosial
+- CRUD program bantuan
+- CRUD penerima bantuan sosial
+- Approval penerima bantuan sosial
+- Reject penerima bantuan sosial
+- Pencatatan status pencairan bantuan
 
-## Laravel Sponsors
+## BUMDes
+- BUMDes Profile
+- Product manajemen
+- Product barcode
+- Stock manajemen
+- Sales manajemen
+- Sales item manajemen / POS / KASIR
+- Transaksi
+- Stock berkurang otomatis setelah transaksi
+- Generate invoice
+- Riwayat transaksi
+- Export excel
+- Print PDF
+- BUMDes dashboard
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Dashboard
+- Dashboard administrasi desa
+- Statistik penduduk
+- Statistik gender
+- Statistik pendidikan
+- Statistik umur
+- Dashboard BUMDes
+- Statistik bantuan sosial
+- Statistik transaksi dan penjualan
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Tech Stack
+| Technology | Version |
+|----------|--------|
+| `PHP` | 8.2+ |
+| `Laravel` | 12 |
+| `Mysql` | 8+ |
+| `Postmant` | API Testing |
+| `VS Code` | Tools Menulis Code |
+| `Xampp` | 3.3.0 |
 
-## Contributing
+## Requirements
+Sebelum menjalankan project, pastikan environment sudah meiliki:
+- PHP 8.2+
+- Composer
+- Mysql
+- Apache
+- Git
+- Postmant
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Instalation
+1.Clone Repository
+ https://github.com/MauludinAdam/Desa-Digital-Api.git
+ Masuk ke directory project
+ cd Desa-Digital-Api
+2. Install Dependencies
+   composer Install
+3. Copy Environment File
+   cp .env.example .env
+   untuk windows:
+   copy .env.example .env
+4. Generate Application Key
+   php artisan serve
+   
+## Konfigurasi Database
+Buat database Mysql terlebih dahulu.
+Contoh: CREATE DATABASE desa_digital.
 
-## Code of Conduct
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=desa-digital
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Security Vulnerabilities
+Sesuaikan Konfigurasi database dengan environment masing-masing.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Migration
+Jalankan migration:
+php artisan migrate
+jika project menggunakan seeder:
+php artisan db:seed
+atau
+php artisan migrate --seede
+
+## Authentication
+API menggunakan Laravel Sanctum untuk autentikasi.
+Setelah login berhasil, API akan memberikan autentikasi token.
+Contoh: POST /api/login
+Request:
+{
+    "emali": "admin@gmail.com",
+    "password": "admin123"
+}
+
+Response:
+{
+    "success": true,
+    "message": "Login Berhasil",
+    "data": {
+        "user": {
+          "id": "213232",
+          "name": "Admin",
+          "email": "admin@gmail.com"
+        },
+        "token": "1|34343rrersrer345"
+    }
+}
+
+Token digunakan pada endpoint yang membutuhkan autentikasi:
+Authorization: Bearer {token}
+
+## Roles & Permission
+Role Utama:
+1 Admin
+admin memiliki akses untuk mengelola administrasi desa seperti:
+- User
+- Penduduk
+- Kartu keluarga
+- Surat
+- Bantuan Sosial
+- Master Data
+- Profile Desa
+
+2 Kepala Desa
+ Kepala desa memiliki akses untuk:
+ - Melihat data administrasi
+ - melihat dashboard
+ - Approval Surat
+ - Approval Bantuan Sosial
+ - Melihat data BUMDes
+ - Melihat dashboard BUMDes
+
+3 Operator BUMDes
+Operator BUMDes memiliki akses untuk:
+- Mengelola produk
+- Mengelola Stok
+- Mengelola Transaksi
+- Mengelola Sales
+- Mengelola Sales Item
+- Mengakses POS / KASIR
+- Export Laproan Transaksi
+
+## API Endpoint
+Base URL:
+http://localhost:8000/api
+
+Authentication
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| Post | /login | Login |
+| Post | /logout | Logout |
+| Get | /me | Get authenticated |
+
+## users
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| GET | /user | Get user |
+| POST | /user | Create user |
+| GET | /user/{id} | Get user detail |
+| PUT | /user/{id} | Update user |
+| DELETE | /user/{id} | Delete user |
+
+## Roles
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| GET | /roles | Get role |
+| POST | /roles | Create role |
+| GET | /roles/{id} | Get role detail |
+| PUT | /roles/{id} | Update role |
+| DELETE | /roles/{id} | Delete role |
+
+## Citizens
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| GET | /citizens | Get citizens |
+| POST | /citizens | Create citizen |
+| GET | /citizens/{id} | Get citizens detail |
+| PUT | /citizens/{id} | Update citizen |
+| DELETE | /citizens/{id} | Delete citizen |
+
+## Family Cards
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| GET | /family-card | Get family card |
+| POST | /family-card | Create family card |
+| GET | /family-card/{id} | Get family card detail |
+| PUT | /family-card/{id} | Update family card |
+| DELETE | /family-card/{id} | Delete family card |
+
+## BUMDes Product
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| GET | /bumdes-product | Get product |
+| POST | /bumdes-product | Create product |
+| GET | /bumdes-product/{id} | Get product detail |
+| PUT | /bumdes-product/{id} | Update product |
+| DELETE | /bumdes-product/{id} | Delete product |
+
+## BUMDes Sales
+| Method | Endpoint | Description |
+|:--------|:------:|------:|
+| GET | /bumdes-sales | Get sales |
+| POST | /bumdes-sales | Create sales |
+| GET | /bumdes-sales/{id} | Get sales detail |
+| PUT | /bumdes-sales/{id} | Update sales |
+| DELETE | /bumdes-sales/{id} | Delete sales |
+
+## API Response Format
+API menggunakan format response yang konsisten.
+
+Success
+{
+    "success": true,
+    "message": "Data berhasil diambil",
+    "data": {}
+}
+
+Error
+{
+    "success": false,
+    "message": "Data tidak ditemukan",
+    "data": null,
+}
+
+
+## Pagination
+Endpoint yang menggunakan pagination memiliki response seperti:
+{
+    "success": true'
+    "message": "Data berhasil diambil",
+    "data": {
+      "data": [],
+      "current_page": 1,
+      "last_page": 1,
+      "per_page": 10,
+      "total": 100
+    }
+}
+
+
+## API Testing
+API dikembangkan dan diuji mengguanakan Postman.
+
+Testing mencakup:
+- Authentication
+- CRUD
+- Validation
+- Authorization
+- Role & Permission
+- Pagination
+- Search
+- File Upload
+- Approval
+- Transaksi
+- Stock Manajemen
+- API Error Handling
+
+Postman Collection dapat disimpan pada Repository:
+/docs/postman
+
+## Struktur project
+desa-digital-api/
+├── app/ 
+│   ├── Export/
+│   ├── Helpers/
+│   ├── Http/ 
+│   │    ├── Controllers/ 
+│   │    ├── Middleware/ 
+│   │    ├── Requests/ 
+│   │    └── Resources/ 
+│   │ 
+│   ├── Models/ 
+│   ├── Notifikations/ 
+│   ├── Providers/ 
+│   ├── Traits/ 
+│   │ 
+│   │ 
+│   ├── Helpers/ 
+│   │ 
+│   └── Traits/
+│
+├── config/
+├── database/
+│     ├── migrations/
+│     └── seeders/
+│
+├── routes/
+│    └── api.php/
+│
+├── storage/
+├── test/
+├── env.example/
+├── gitignore/
+├── artisan/
+├── composer.json/
+└── README.md/
+
+## Running Application
+jalankan development serve:
+php artisan serve
+API dapat diakses melalui
+http://127.0.0.1:8000
+
+
+## Clear Cache
+Jika terjadi masalah Konfigurasi atau route:
+php artisan optimize:clear
+
+atau secara terpisah:
+php artisan config:clear
+php artisan route:clear
+php artisan cache:clear
+
+## Security
+Beberapa mekanisme keamanan yang digunakan:
+- Laravel Sanctum authentication
+- Role-based authorization
+- Permission-based authentication
+- Form Request Validation
+- API rate limiting
+- CSRF protection sesuai kebutuhan
+- Mass assignment protection
+- Input validation
+- Soft delete untuk data tertentu
+
+## Development
+- Eloquent ORM
+- Api Resource
+- Form Request
+- Middleware
+- UUID
+- Soft Delete
+- Pagination
+- Search & Filtering
+- Centralized API response
+
+## Author
+Mauludin Adam
+Backend Development -- Laravel & REST API
+Project: Desa Digital
+
 
 ## License
+Project ini kembangkan untuk portofolio dan bertujuan untuk edukasi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
