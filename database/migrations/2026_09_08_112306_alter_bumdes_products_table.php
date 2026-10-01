@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('bumdes_products', function (Blueprint $table){
-            $table->dropColumn(['type','photo']);
-            $table->unsignedBigInteger('stock')->default(0)->after('price');
+        Schema::table('bumdes_products', function (Blueprint $table) {
+            if (Schema::hasColumn('bumdes_products', 'type')) {
+                $table->dropColumn('type');
+            }
+
+            if (!Schema::hasColumn('bumdes_products', 'stock')) {
+                $table->unsignedBigInteger('stock')
+                    ->default(0)
+                    ->after('price');
+            }
         });
     }
 
@@ -22,10 +29,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('bumdes_products', function (Blueprint $table){
-            $table->enum('type', ['product', 'service'])->nullable();
-            $table->string('image')->nullable();
-            $table->dropColumn('stoct');
+        Schema::table('bumdes_products', function (Blueprint $table) {
+            if (!Schema::hasColumn('bumdes_products', 'type')) {
+                $table->enum('type', ['product', 'service'])->nullable();
+            }
+
+            if (Schema::hasColumn('bumdes_products', 'stock')) {
+                $table->dropColumn('stock');
+            }
         });
     }
 };

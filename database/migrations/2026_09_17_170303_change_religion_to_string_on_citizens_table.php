@@ -10,13 +10,19 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('citizens', function (Blueprint $table) {
-        $table->dropForeign('citizens_religion_id_foreign');
-    });
+    {
+        Schema::table('citizens', function (Blueprint $table) {
+            $table->string('religion')->nullable()->change();
+        });
+    }
 
-    Schema::table('citizens', function (Blueprint $table) {
-        $table->string('religion')->nullable()->change();
-    });
-}
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('citizens', function (Blueprint $table) {
+            $table->string('religion')->nullable(false)->change();
+        });
+    }
 };

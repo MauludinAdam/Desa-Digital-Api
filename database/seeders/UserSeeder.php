@@ -13,27 +13,36 @@ class UserSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {
-        User::create([
-            'role_id'   => '1',
-            'name'  => 'Mauludin',
-            'email' => 'mauludin@gmail.com',
-            'password'  => bcrypt('admin123')
-        ])->assignRole('Admin');
+{
+    User::updateOrCreate(
+        ['email' => 'mauludin@gmail.com'],
+        [
+            'role_id' => 1,
+            'name' => 'Mauludin',
+            'password' => bcrypt('admin123'),
+        ]
+    );
 
-        User::create([
-            'role_id'   => '2',
-            'name'      => 'Fajar Ghozali',
-            'email'     => 'fajar@gmail.com',
-            'password'  => bcrypt('fajar123')
-        ])->assignRole('Operator');
+    User::updateOrCreate(
+        ['email' => 'fajar@gmail.com'],
+        [
+            'role_id' => 2,
+            'name' => 'Fajar Ghozali',
+            'password' => bcrypt('fajar123'),
+        ]
+    );
 
-        User::create([
-            'role_id'   => '3',
-            'name'      => 'Kepala Desa',
-            'email'     => 'kades@gmail.com',
-            'password'  => bcrypt('kades123')
-        ])->assignRole('Kepala Desa');
-        
-    }
+    User::updateOrCreate(
+        ['email' => 'kades@gmail.com'],
+        [
+            'role_id' => 3,
+            'name' => 'Kepala Desa',
+            'password' => bcrypt('kades123'),
+        ]
+    );
+
+    User::where('email', 'mauludin@gmail.com')->first()->assignRole('Admin');
+    User::where('email', 'fajar@gmail.com')->first()->assignRole('Operator');
+    User::where('email', 'kades@gmail.com')->first()->assignRole('Kepala Desa');
+}
 }

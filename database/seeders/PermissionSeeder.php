@@ -224,7 +224,7 @@ class PermissionSeeder extends Seeder
                 'profile-village-menu',
                 'user-menu',
                 'user-status-update',
-                'profile-user',
+                'profile-user-menu',
 
                 // citizen
                 'citizen-list',

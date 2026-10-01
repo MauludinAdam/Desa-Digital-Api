@@ -15,7 +15,12 @@ class CitizenSeeder extends Seeder
     public function run(): void
     {
         for ($i = 1; $i<= 10; $i++ ){
-            
+ 
+           $nik = '32012345' .str_pad($i, 8, '0', STR_PAD_LEFT);
+	  if(Citizen::where('nik', $nik)->exists()){
+	  continue;
+	}
+           
              Citizen::create([
                 'id'               => Str::uuid(),
                 'full_name'        => fake()->name(),
