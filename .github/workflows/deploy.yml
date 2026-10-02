@@ -1,0 +1,60 @@
+name: Deploy Laravel API
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, bcmath, intl, pdo_mysql, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate Composer
+        run: composer validate --strict
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          port: ${{ secrets.VPS_PORT }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+
+            cd /www/wwwroot/api.desadigital.my.id
+
+            echo "Pull latest source code..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "Install production dependencies..."
+            /www/server/php/83/bin/php /usr/bin/composer install --no-dev --optimize-autoloader --no-interaction
+
+            echo "Run database migrations..."
+            /www/server/php/83/bin/php artisan migrate --force
+
+            echo "Clear Laravel cache..."
+            /www/server/php/83/bin/php artisan optimize:clear
+
+            echo "Build Laravel cache..."
+            /www/server/php/83/bin/php artisan optimize
+
+            echo "Deployment completed!"
