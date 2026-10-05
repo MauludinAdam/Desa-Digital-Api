@@ -27,11 +27,6 @@ class UserResource extends JsonResource
             ]
             : null,
 
-            'permissions' => $this->getAllPermissions()
-            ->pluck('name')
-            ->values(),
-
-            'status'    => $this->status,
         ];
     }
 }
