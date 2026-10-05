@@ -35,7 +35,7 @@ class UserUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'role_id'   => 'Rolee',
+            'role_id'   => 'Role',
             'name'      => 'Nama',
             'email'     => 'Email',
             'current_password' => 'Password lama',

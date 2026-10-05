@@ -96,6 +96,9 @@ class UserController extends Controller
 
             $user->update($data);
 
+            $role = Role::findOrFail($data['role_id']);
+            $user->syncRoles($role->name);
+
             return ResponseHelper::jsonResponse(true, 'Data User Berhasil Diupdate', new UserResource($user), 200);
         } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500); 
