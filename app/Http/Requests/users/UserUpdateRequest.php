@@ -23,6 +23,7 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'role_id'   => 'required|exists:roles,id',
             'name'      => 'sometimes|string|max:250',
             'email'     => 'sometimes|email|max:255',
 
@@ -34,6 +35,7 @@ class UserUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
+            'role_id'   => 'Rolee',
             'name'      => 'Nama',
             'email'     => 'Email',
             'current_password' => 'Password lama',
@@ -45,6 +47,7 @@ class UserUpdateRequest extends FormRequest
     public function messages()
     {
         return [
+            'role_id.required'     => ':attribute harus diisi',
             'name.required'     => ':attribute harus diisi',
             'email.required'    => ':attribute harus diisi',
             'email.email'       => ':attribute harus berupa email yang valid',
