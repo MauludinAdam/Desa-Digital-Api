@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         RateLimiter::clear($key);
 
-        if($user->status !== 'Active'){
+        if($user->status !== 'active'){
             return ResponseHelper::jsonResponse(false, 'Akun anda sedang tidak aktif', null, 403);
         }
 
