@@ -94,7 +94,7 @@ class UserController extends Controller
                 return ResponseHelper::jsonResponse(false, 'Data User Tidak Ditemukan', null, 404);
             }
 
-            $user = $this->update($id, $data);
+            $user = $this->update($data);
 
             return ResponseHelper::jsonResponse(true, 'Data User Berhasil Diupdate', new UserResource($user), 200);
         } catch (\Throwable $e) {
