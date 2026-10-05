@@ -15,20 +15,20 @@ class UserSeeder extends Seeder
     public function run(): void
 {
     User::updateOrCreate(
-        ['email' => 'mauludin@gmail.com'],
+        ['email' => 'admin@gmail.com'],
         [
             'role_id' => 1,
-            'name' => 'Mauludin',
+            'name' => 'Admin',
             'password' => bcrypt('admin123'),
         ]
     );
 
     User::updateOrCreate(
-        ['email' => 'fajar@gmail.com'],
+        ['email' => 'operator@gmail.com'],
         [
             'role_id' => 2,
-            'name' => 'Fajar Ghozali',
-            'password' => bcrypt('fajar123'),
+            'name' => 'Operator',
+            'password' => bcrypt('operator'),
         ]
     );
 
@@ -41,8 +41,8 @@ class UserSeeder extends Seeder
         ]
     );
 
-    User::where('email', 'mauludin@gmail.com')->first()->assignRole('Admin');
-    User::where('email', 'fajar@gmail.com')->first()->assignRole('Operator');
+    User::where('email', 'admin@gmail.com')->first()->assignRole('Admin');
+    User::where('email', 'operator@gmail.com')->first()->assignRole('Operator');
     User::where('email', 'kades@gmail.com')->first()->assignRole('Kepala Desa');
 }
 }
