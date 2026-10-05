@@ -26,8 +26,8 @@ class UserUpdateRequest extends FormRequest
             'name'      => 'sometimes|string|max:250',
             'email'     => 'sometimes|email|max:255',
 
-            'password_lama'  => 'nullable|required_with:password|password_lama',
-            'password_baru'  => 'nullable|min:8|confirmed',
+            'current_password'  => 'nullable|required_with:password|current_password',
+            'password'          => 'nullable|min:8|confirmed',
         ];
     }
 
@@ -36,8 +36,8 @@ class UserUpdateRequest extends FormRequest
         return [
             'name'      => 'Nama',
             'email'     => 'Email',
-            'password_lama' => 'Password lama',
-            'password_baru' => 'Password baru',
+            'current_password' => 'Password lama',
+            'password' => 'Password baru',
             'password_confirmation' => 'Konfirmasi password',
         ];
     }
@@ -49,9 +49,9 @@ class UserUpdateRequest extends FormRequest
             'email.required'    => ':attribute harus diisi',
             'email.email'       => ':attribute harus berupa email yang valid',
 
-            'password_lama.required_with'    => ':attribute harus diisi ketika ingin menggati password',
-            'password_baru.min'                      => ':attribute minimal 8 karakter',
-            'password_baru.confirmed'                => ':attribute dan konfimasi password harus sama',
+            'current_password.required_with'    => ':attribute harus diisi ketika ingin menggati password',
+            'password.min'                      => ':attribute minimal 8 karakter',
+            'password.confirmed'                => ':attribute dan konfimasi password harus sama',
         ];
     }
 }
