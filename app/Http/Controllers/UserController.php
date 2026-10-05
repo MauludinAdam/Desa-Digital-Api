@@ -88,7 +88,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         try {
-            $user = User::find($id);
+            $user = User::findOrFail($id);
 
             if(empty($user)){
                 return ResponseHelper::jsonResponse(false, 'Data User Tidak Ditemukan', null, 404);
