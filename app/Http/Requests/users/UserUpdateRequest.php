@@ -26,8 +26,8 @@ class UserUpdateRequest extends FormRequest
             'name'      => 'sometimes|string|max:250',
             'email'     => 'sometimes|email|max:255',
 
-            'current_password'  => 'nullable|required_with:password|current_password',
-            'password'          => 'nullable|min:8|confirmed',
+            'password_lama'  => 'nullable|required_with:password|current_password',
+            'password_baru'  => 'nullable|min:8|confirmed',
         ];
     }
 
@@ -36,8 +36,8 @@ class UserUpdateRequest extends FormRequest
         return [
             'name'      => 'Nama',
             'email'     => 'Email',
-            'current_password' => 'Password lama',
-            'password' => 'Password baru',
+            'password_lama' => 'Password lama',
+            'password_baru' => 'Password baru',
             'password_confirmation' => 'Konfirmasi password',
         ];
     }
