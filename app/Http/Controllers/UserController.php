@@ -8,7 +8,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PaginateResource;
 use App\Http\Requests\users\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\users\UserUpdateRequest;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
