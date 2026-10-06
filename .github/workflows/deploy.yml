@@ -39,7 +39,7 @@ jobs:
           script: |
             set -e
 
-            cd /www/wwwroot/api.desadigital.my.id
+            cd /www/wwwroot/api.desadigita.my.id
 
             echo "Pull latest source code..."
             git fetch origin main
