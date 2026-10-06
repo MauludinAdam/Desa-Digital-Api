@@ -21,6 +21,7 @@ return [
 
     'allowed_origins' => [
     'http://localhost:5173',
+    'https://desadigita.my.id',
 ],
 
     'allowed_origins_patterns' => [],
