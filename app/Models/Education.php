@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\SOftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\UUID;
 
 use Illuminate\Database\Eloquent\Model;
