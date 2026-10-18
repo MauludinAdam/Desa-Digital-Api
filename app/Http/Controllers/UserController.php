@@ -129,7 +129,7 @@ class UserController extends Controller
     {
         
         $request->validate([
-            'status' => 'required|in:Active,Inactive',
+            'status' => 'required|in:active,inactive',
         ]);
 
         try {
@@ -149,7 +149,7 @@ class UserController extends Controller
                 'status' => $request->status,
             ]);
 
-            return ResponseHelper::jsonResponse(true, 'Status useer berhasil diperbarui', new UserResource($user->load('role')), 200);
+            return ResponseHelper::jsonResponse(true, 'Status user berhasil diperbarui', new UserResource($user->load('role')), 200);
         } catch (\Throwable $e) {
             return ResponseHelper::jsonResponse(false, $e->getMessage(), null, 500);
         }

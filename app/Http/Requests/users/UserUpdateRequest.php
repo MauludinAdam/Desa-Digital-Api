@@ -29,6 +29,7 @@ class UserUpdateRequest extends FormRequest
 
             'current_password'  => 'nullable|required_with:password|current_password',
             'password'          => 'nullable|min:8|confirmed',
+            'status'            => 'required|string|max:250'
         ];
     }
 
@@ -41,6 +42,7 @@ class UserUpdateRequest extends FormRequest
             'current_password' => 'Password lama',
             'password' => 'Password baru',
             'password_confirmation' => 'Konfirmasi password',
+            'status'    => 'Status',
         ];
     }
 
@@ -55,6 +57,7 @@ class UserUpdateRequest extends FormRequest
             'current_password.required_with'    => ':attribute harus diisi ketika ingin menggati password',
             'password.min'                      => ':attribute minimal 8 karakter',
             'password.confirmed'                => ':attribute dan konfimasi password harus sama',
+            'status.required'   => ':attribute harus diisi',
         ];
     }
 }

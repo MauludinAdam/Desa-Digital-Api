@@ -16,6 +16,7 @@ class UserSeeder extends Seeder
 {
     User::updateOrCreate(
         ['email' => 'admin@gmail.com'],
+
         [
             'role_id' => 1,
             'name' => 'Admin',
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
 
     User::updateOrCreate(
         ['email' => 'operator@gmail.com'],
+
         [
             'role_id' => 2,
             'name' => 'Operator',
@@ -34,6 +36,7 @@ class UserSeeder extends Seeder
 
     User::updateOrCreate(
         ['email' => 'kades@gmail.com'],
+        
         [
             'role_id' => 3,
             'name' => 'Kepala Desa',

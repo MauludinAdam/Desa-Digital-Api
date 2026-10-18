@@ -29,7 +29,7 @@ class UserResource extends JsonResource
 
           'permissions' => $this->getAllPermissions()->pluck('name')->values(),
           
-          'status' => $this->status,
+          'status' => $this->status,    
         ];
     }
 }
