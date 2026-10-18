@@ -129,7 +129,7 @@ class UserController extends Controller
     {
         
         $request->validate([
-            'status' => 'required|in:active,inactive',
+            'status' => 'required|in:Active,Inactive',
         ]);
 
         try {
